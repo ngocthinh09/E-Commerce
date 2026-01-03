@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import Header from '../components/Header';
+import BuyAgainIcon from '../assets/images/icons/buy-again.png';
 import './OrdersPage.css';
 
 function OrdersPage() {
@@ -47,7 +48,7 @@ function OrdersPage() {
                 <button class="buy-again-button button-primary">
                   <img
                     class="buy-again-icon"
-                    src="images/icons/buy-again.png"
+                    src={BuyAgainIcon}
                   />
                   <span class="buy-again-message">Add to Cart</span>
                 </button>
@@ -74,7 +75,7 @@ function OrdersPage() {
                 <button class="buy-again-button button-primary">
                   <img
                     class="buy-again-icon"
-                    src="images/icons/buy-again.png"
+                    src={BuyAgainIcon}
                   />
                   <span class="buy-again-message">Add to Cart</span>
                 </button>
@@ -121,7 +122,7 @@ function OrdersPage() {
                 <button class="buy-again-button button-primary">
                   <img
                     class="buy-again-icon"
-                    src="images/icons/buy-again.png"
+                    src={BuyAgainIcon}
                   />
                   <span class="buy-again-message">Add to Cart</span>
                 </button>
