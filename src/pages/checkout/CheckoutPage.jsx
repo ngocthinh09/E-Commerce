@@ -25,7 +25,7 @@ function CheckoutPage({ cart }) {
       <link rel="icon" type="image/svg+xml" href="favicon/cart-favicon.png" />
       <title>Checkout</title>
 
-      <CheckoutHeader />
+      <CheckoutHeader cart={cart} />
 
       <div className="checkout-page">
         <div className="page-title">Review your order</div>
