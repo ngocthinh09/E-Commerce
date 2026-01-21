@@ -4,9 +4,12 @@ import { Link } from "react-router";
 import { Fragment } from "react";
 
 function OrderDetailsGrid({ order }) {
+  const orderId = order.id;
   return (
     <div className="order-details-grid">
       {order.products.map((orderProduct) => {
+        const productId = orderProduct.productId;
+        
         return (
           <Fragment key={orderProduct.product.id}>
             <div className="product-image-container">
@@ -29,7 +32,7 @@ function OrderDetailsGrid({ order }) {
             </div>
 
             <div className="product-actions">
-              <Link to="/tracking">
+              <Link to={`/tracking/${orderId}/${productId}`}>
                 <button className="track-package-button button-secondary">
                   Track package
                 </button>
