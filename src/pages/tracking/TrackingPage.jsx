@@ -9,7 +9,6 @@ import './TrackingPage.css';
 function TrackingPage({ cart }) {
   const { orderId, productId } = useParams();
   const [order, setOrder] = useState(null);
-
   
   useEffect(() => {
     const fetchTrackingData = async () => {
@@ -25,6 +24,14 @@ function TrackingPage({ cart }) {
   const orderProduct = order.products.find((product) => {
     return product.productId === productId;
   });
+
+  const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
+  // const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
+  const timePassedMs = totalDeliveryTimeMs * 0.3; // temporary time
+  const deliveryPercent = Math.min(timePassedMs / totalDeliveryTimeMs * 100, 100);
+  const isPreparing = (deliveryPercent < 33);
+  const isShipped = (deliveryPercent >= 33 && deliveryPercent < 100);
+  const isDeliveried = (deliveryPercent === 100);
 
   return (
     <>
@@ -53,13 +60,13 @@ function TrackingPage({ cart }) {
           />
 
           <div className="progress-labels-container">
-            <div className="progress-label">Preparing</div>
-            <div className="progress-label current-status">Shipped</div>
-            <div className="progress-label">Delivered</div>
+            <div className={`progress-label ${isPreparing && 'current-status'}`}>Preparing</div>
+            <div className={`progress-label ${isShipped && 'current-status'}`}>Shipped</div>
+            <div className={`progress-label ${isDeliveried && 'current-status'}`}>Delivered</div>
           </div>
 
           <div className="progress-bar-container">
-            <div className="progress-bar"></div>
+            <div className="progress-bar" style={{width: `${deliveryPercent}%`}}></div>
           </div>
         </div>
       </div>

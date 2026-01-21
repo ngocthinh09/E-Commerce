@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 
-function NotFound() {
+function NotFound({ cart }) {
   const messageStyle = {
     fontFamily: "Times New Roman",
     fontSize: "30px",
@@ -10,7 +10,7 @@ function NotFound() {
 
   return (
     <>
-      <Header />
+      <Header cart={cart} />
       <div style={messageStyle}>Page not found</div>
     </>
   );
