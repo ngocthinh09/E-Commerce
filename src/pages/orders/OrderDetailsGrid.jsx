@@ -8,7 +8,7 @@ function OrderDetailsGrid({ order, loadCart }) {
       {order.products.map((orderProduct) => {
         
         return (
-          <OrderProduct orderId={orderId} orderProduct={orderProduct} loadCart={loadCart} />
+          <OrderProduct key={orderProduct.product.id} orderId={orderId} orderProduct={orderProduct} loadCart={loadCart} />
         );
       })}
     </div>

@@ -17,7 +17,7 @@ function OrderProduct ({ orderId, orderProduct, loadCart }) {
 
 
     return (
-        <Fragment key={orderProduct.product.id}>
+        <Fragment>
             <div className="product-image-container">
               <img src={orderProduct.product.image} />
             </div>
