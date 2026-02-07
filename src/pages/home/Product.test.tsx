@@ -1,15 +1,16 @@
 import { it, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import axios from 'axios';
 import Product from './Product';
+import type { Product as ProductType } from '../../types';
 
 vi.mock('axios');
 
 describe('Product component', () => {
-    let user;
-    let product;
-    let loadCart;
+    let user: UserEvent;
+    let product: ProductType;
+    let loadCart: () => Promise<void>;
 
     // TEST HOOK: beforeEach(), afterEach(), beforeAll(), afterAll()
     beforeEach(() => {

@@ -5,12 +5,13 @@ import { MemoryRouter } from "react-router";
 import PaymentSummary from "./PaymentSummary";
 import { useLocation } from "react-router";
 import axios from "axios";
+import type { PaymentSummary as PaymentSummaryType } from "../../types";
 
 vi.mock('axios');
 
 describe("PaymentSummary component", () => {
-  let paymentSummary;
-  let loadCart;
+  let paymentSummary: PaymentSummaryType;
+  let loadCart: () => Promise<void>;
 
   beforeEach(() => {
     paymentSummary = {

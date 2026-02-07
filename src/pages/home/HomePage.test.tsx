@@ -4,16 +4,17 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
 import HomePage from "./HomePage";
+import type { Product } from "../../types";
 
 vi.mock("axios");
 
 describe("Homepage component", () => {
-  let loadCart;
+  let loadCart: () => Promise<void>;
 
   beforeEach(() => {
     loadCart = vi.fn();
 
-    axios.get.mockImplementation(async (urlPath) => {
+    vi.mocked(axios.get).mockImplementation(async (urlPath: string): Promise<{data: Product[]}> => {
       if (urlPath === "/api/products") {
         return {
           data: [
@@ -42,6 +43,7 @@ describe("Homepage component", () => {
           ]
         };
       }
+      return { data: [] };
     });
   });
 
