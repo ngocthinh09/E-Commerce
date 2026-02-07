@@ -1,8 +1,15 @@
 import DeliveryOptions from "./DeliveryOptions";
 import CartItemDetails from "./CartItemDetails";
 import DeliveryDate from "./DeliveryDate";
+import type { CartItem, DeliveryOption } from "../../types";
 
-function OrderSummary({ cart, deliveryOptions, loadCart}) {
+interface OrderSummary {
+  cart: CartItem[];
+  deliveryOptions: DeliveryOption[];
+  loadCart: () => Promise<void>;
+}
+
+function OrderSummary({ cart, deliveryOptions, loadCart }: OrderSummary) {
   return (
     <div className="order-summary">
       {deliveryOptions.length > 0 &&

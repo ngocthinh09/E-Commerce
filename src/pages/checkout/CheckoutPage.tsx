@@ -4,14 +4,24 @@ import CheckoutHeader from "./CheckoutHeader";
 import OrderSummary from "./OrderSummary";
 import PaymentSummary from "./PaymentSummary";
 import "./CheckoutPage.css";
+import type {
+  CartItem,
+  DeliveryOption,
+  PaymentSummary as PaymentSummaryType,
+} from "../../types";
 
-function CheckoutPage({ cart, loadCart }) {
-  const [deliveryOptions, setDeliveryOptions] = useState([]);
-  const [paymentSummary, setPaymentSummary] = useState(null);
+interface CheckoutPageProps {
+  cart: CartItem[];
+  loadCart: () => Promise<void>;
+}
+
+function CheckoutPage({ cart, loadCart }: CheckoutPageProps) {
+  const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption[]>([]);
+  const [paymentSummary, setPaymentSummary] = useState<PaymentSummaryType | null>(null);
 
   useEffect(() => {
     const fetchCheckoutData = async () => {
-      const response = await axios.get("/api/delivery-options?expand=estimatedDeliveryTime");
+      const response = await axios.get<DeliveryOption[]>("/api/delivery-options?expand=estimatedDeliveryTime");
       setDeliveryOptions(response.data);
     };
     fetchCheckoutData();
@@ -19,9 +29,9 @@ function CheckoutPage({ cart, loadCart }) {
 
   useEffect(() => {
     const fetchPaymentSummay = async () => {
-      const response = await axios.get("/api/payment-summary");
+      const response = await axios.get<PaymentSummaryType>("/api/payment-summary");
       setPaymentSummary(response.data);
-    }
+    };
     fetchPaymentSummay();
   }, [cart]);
 
@@ -36,9 +46,13 @@ function CheckoutPage({ cart, loadCart }) {
         <div className="page-title">Review your order</div>
 
         <div className="checkout-grid">
-          <OrderSummary cart={cart} deliveryOptions={deliveryOptions} loadCart={loadCart} />
+          <OrderSummary
+            cart={cart}
+            deliveryOptions={deliveryOptions}
+            loadCart={loadCart}
+          />
 
-          <PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />
+          {paymentSummary && (<PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />)}
         </div>
       </div>
     </>

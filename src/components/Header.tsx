@@ -1,30 +1,41 @@
 import { NavLink, useNavigate, useSearchParams } from 'react-router';
-import { useState } from 'react';
+import { useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import WhiteLogo from '../assets/images/logo-white.png';
 import MobileWhiteLogo from '../assets/images/mobile-logo-white.png';
 import SearchIcon from '../assets/images/icons/search-icon.png';
 import CartIcon from '../assets/images/icons/cart-icon.png';
 import './Header.css';
+import type { CartItem } from '../types';
 
-function Header({ cart }) {
+interface HeaderProps {
+  cart: CartItem[]
+}
+
+function Header({ cart } : HeaderProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search');
 
-  const [search, setSearch] = useState(searchText || '');
+  const [search, setSearch] = useState<string>(searchText || '');
 
-  let totalQuantity = 0;
+  let totalQuantity: number = 0;
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;
   });
 
-  const updateSearchInput = (event) => {
+  const updateSearchInput = (event : ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
   const searchProducts = () => {
     console.log(`Searching: ${search}`);
     navigate(`/?search=${search}`)
+  };
+
+  const handleKeyDown = (event : KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      searchProducts();
+    }
   };
 
   return (
@@ -41,6 +52,7 @@ function Header({ cart }) {
           className="search-bar" type="text" 
           placeholder="Search" 
           onChange={updateSearchInput}
+          onKeyDown={handleKeyDown}
         />
 
         <button 

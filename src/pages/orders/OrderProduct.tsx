@@ -3,8 +3,15 @@ import { Fragment } from "react";
 import dayjs from "dayjs";
 import BuyAgainIcon from "../../assets/images/icons/buy-again.png";
 import { Link } from "react-router";
+import type { OrderProduct as OrderProductType } from "../../types";
 
-function OrderProduct ({ orderId, orderProduct, loadCart }) {
+interface OrderProductProps {
+  orderId: string;
+  orderProduct: OrderProductType;
+  loadCart: () => Promise<void>;
+}
+
+function OrderProduct ({ orderId, orderProduct, loadCart }: OrderProductProps) {
     const productId = orderProduct.productId;
     const addToCart = async () => {
         await axios.post("/api/cart-items", {

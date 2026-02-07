@@ -2,20 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import Header from "../../components/Header";
-import ProductsGrid from "./ProductGrid";
+import ProductGrid from "./ProductGrid";
 import "./HomePage.css";
+import type { Product, CartItem } from "../../types";
 
-function HomePage({ cart, loadCart }) {
-  const [products, setProducts] = useState([]);
+interface HomePageProps {
+  cart: CartItem[];
+  loadCart: () => Promise<void>;
+}
+
+function HomePage({ cart, loadCart }: HomePageProps) {
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search');
 
   useEffect(() => {
     const getHomeData = async () => {
       const url = searchText ? `/api/products?search=${searchText}` : '/api/products';
-      const response = await axios.get(url);
+      const response = await axios.get<Product[]>(url);
       setProducts(response.data);
     };
+
     getHomeData();
   }, [searchText]);
 
@@ -28,7 +35,7 @@ function HomePage({ cart, loadCart }) {
       <Header cart={cart} />
 
       <div className="home-page">
-        <ProductsGrid products={products} loadCart={loadCart} />
+        <ProductGrid products={products} loadCart={loadCart} />
       </div>
     </>
   );

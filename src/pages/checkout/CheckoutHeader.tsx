@@ -3,8 +3,13 @@ import Logo from '../../assets/images/logo.png';
 import MobileLogo from '../../assets/images/mobile-logo.png';
 import CheckoutLockIcon from '../../assets/images/icons/checkout-lock-icon.png';
 import './CheckoutHeader.css';
+import type { CartItem } from '../../types';
 
-function CheckoutHeader({ cart }) {
+interface CheckoutHeaderProps {
+  cart: CartItem[];
+}
+
+function CheckoutHeader({ cart }: CheckoutHeaderProps) {
   let totalQuantity = 0;
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;

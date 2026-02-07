@@ -1,6 +1,12 @@
 import OrderProduct from "./OrderProduct";
+import type { Order } from "../../types";
 
-function OrderDetailsGrid({ order, loadCart }) {
+interface OrderDetailsGridProps {
+  order: Order;
+  loadCart: () => Promise<void>;
+}
+
+function OrderDetailsGrid({ order, loadCart }: OrderDetailsGridProps) {
   const orderId = order.id;
   
   return (

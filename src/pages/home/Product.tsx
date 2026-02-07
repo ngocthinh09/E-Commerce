@@ -1,15 +1,20 @@
 import axios from "axios";
 import { formatMoney } from "../../utils/money";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
+import type { Product as ProductType } from "../../types";
 
+interface ProductProps {
+  product: ProductType;
+  loadCart: () => Promise<void>;
+}
 
-function Product({ product, loadCart }) {
-  const [quantity, setQuantity] = useState(1);
-  const [showAddedMessage, setShowAddedMessage] = useState(false);
+function Product({ product, loadCart } : ProductProps) {
+  const [quantity, setQuantity] = useState<number>(1);
+  const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false);
 
-  const addToCart = async () => {
-    await axios.post("/api/cart-items", {
+  const addToCart = async (): Promise<void> => {
+    await axios.post<void>("/api/cart-items", {
       productId: product.id,
       quantity: quantity,
     });
@@ -22,7 +27,7 @@ function Product({ product, loadCart }) {
     }, 2000);
   };
 
-  const selectQuantity = (event) => {
+  const selectQuantity = (event: ChangeEvent<HTMLSelectElement>): void => {
     const quantitySelected = Number(event.target.value);
     setQuantity(quantitySelected);
     console.log(quantitySelected);
@@ -48,6 +53,7 @@ function Product({ product, loadCart }) {
           className="product-rating-stars"
           data-testid="product-rating-stars-image"
           src={`images/ratings/rating-${product.rating.stars * 10}.png`}
+          alt={`${product.rating.stars} stars`}
         />
         <div className="product-rating-count link-primary">
           {product.rating.count}
@@ -62,16 +68,9 @@ function Product({ product, loadCart }) {
           onChange={selectQuantity}
           data-testid="product-quantity-selector"
         >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
+          {[...Array(10)].map((_, i) => (
+            <option key={i + 1} value={i + 1}>{i + 1}</option>
+          ))}
         </select>
       </div>
 

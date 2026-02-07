@@ -5,14 +5,19 @@ import { Link } from 'react-router';
 import { useParams } from 'react-router';
 import Header from '../../components/Header';
 import './TrackingPage.css';
+import type { CartItem, Order } from '../../types';
 
-function TrackingPage({ cart }) {
-  const { orderId, productId } = useParams();
-  const [order, setOrder] = useState(null);
+interface TrackingPageProps {
+  cart: CartItem[];
+}
+
+function TrackingPage({ cart }: TrackingPageProps) {
+  const { orderId, productId } = useParams<{ orderId: string; productId: string }>();
+  const [order, setOrder] = useState<Order | null>(null);
   
   useEffect(() => {
     const fetchTrackingData = async () => {
-      const response = await axios.get(`/api/orders/${orderId}?expand=products`);
+      const response = await axios.get<Order>(`/api/orders/${orderId}?expand=products`);
       setOrder(response.data);
     }
     fetchTrackingData();
@@ -25,9 +30,11 @@ function TrackingPage({ cart }) {
     return product.productId === productId;
   });
 
+  if (!orderProduct)
+      return null;
+  
   const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
-  // const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
-  const timePassedMs = totalDeliveryTimeMs * 0.3; // temporary time
+  const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
   const deliveryPercent = Math.min(timePassedMs / totalDeliveryTimeMs * 100, 100);
   const isPreparing = (deliveryPercent < 33);
   const isShipped = (deliveryPercent >= 33 && deliveryPercent < 100);

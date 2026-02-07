@@ -1,27 +1,35 @@
 import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useState } from "react";
+import type { CartItem } from "../../types";
+import type { ChangeEvent, KeyboardEvent } from "react";
 
-function CartItemDetails({ cartItem, loadCart }) {
-  const [isUpdatingQuantity, showIsUpdatingQuantity] = useState(false);
-  const [quantity, setQuantity] = useState(cartItem.quantity);
+interface CartItemDetailsProps {
+  cartItem: CartItem;
+  loadCart: () => Promise<void>;
+}
 
-  const updateQuantity = async () => {
+function CartItemDetails({ cartItem, loadCart }: CartItemDetailsProps) {
+  const [isUpdatingQuantity, showIsUpdatingQuantity] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(cartItem.quantity);
+
+  const updateQuantity = async (): Promise<void> => {
     if (isUpdatingQuantity){
-      await axios.put(`/api/cart-items/${cartItem.productId}`, {
+      await axios.put<void>(`/api/cart-items/${cartItem.productId}`, {
         quantity: Number(quantity)
-      })
+      });
+
       showIsUpdatingQuantity(false);
       await loadCart();
     }
     else showIsUpdatingQuantity(true);
   };
 
-  const updateQuantityInput = (event) => {
-    setQuantity(event.target.value);
+  const updateQuantityInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuantity(Number(event.target.value));
   }
 
-  const handleQuantityKeyDown = (event) => {
+  const handleQuantityKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const keyPressed = event.key;
     if (keyPressed === 'Enter'){
       updateQuantity();
@@ -32,7 +40,7 @@ function CartItemDetails({ cartItem, loadCart }) {
     }
   }
 
-  const deleteCartItem = async () => {
+  const deleteCartItem = async (): Promise<void> => {
     await axios.delete(`/api/cart-items/${cartItem.productId}`);
     await loadCart();
   };
@@ -41,20 +49,20 @@ function CartItemDetails({ cartItem, loadCart }) {
     <>
       <img
         className="product-image"
-        src={cartItem.product.image}
-        alt={cartItem.product.name}
+        src={cartItem.product?.image}
+        alt={cartItem.product?.name}
       />
 
       <div className="cart-item-details">
-        <div className="product-name">{cartItem.product.name}</div>
+        <div className="product-name">{cartItem.product?.name}</div>
         <div className="product-price">
-          {formatMoney(cartItem.product.priceCents)}
+          {cartItem.product?.priceCents ? formatMoney(cartItem.product?.priceCents) : "$0.00"}
         </div>
         <div className="product-quantity">
           <span>
             Quantity:{" "}
             {isUpdatingQuantity ? (
-              <input className="quantity-textbox" type="text" value={quantity} onChange={updateQuantityInput} onKeyDown={handleQuantityKeyDown} />
+              <input className="quantity-textbox" type="number" value={quantity} onChange={updateQuantityInput} onKeyDown={handleQuantityKeyDown} autoFocus />
             ) : (
               <span className="quantity-label">{cartItem.quantity}</span>
             )}

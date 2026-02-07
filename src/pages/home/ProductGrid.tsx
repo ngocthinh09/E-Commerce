@@ -1,15 +1,21 @@
-import Product from "./Product";
+import ProductComponent from "./Product";
+import type { Product } from "../../types";
 
-function ProductsGrid({ products, loadCart }) {
+interface ProductGridProps {
+  products: Product[];
+  loadCart: () => Promise<void>;
+}
+
+function ProductGrid({ products, loadCart }: ProductGridProps) {
   return (
     <div className="products-grid">
       {products.map((product) => {
         return (
-          <Product key={product.id} product={product} loadCart={loadCart} />
+          <ProductComponent key={product.id} product={product} loadCart={loadCart} />
         );
       })}
     </div>
   );
 }
 
-export default ProductsGrid;
+export default ProductGrid;
