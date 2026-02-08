@@ -8,7 +8,7 @@ import { useCartStore } from "../../store/useCartStore";
 function Product({ product } : { product: ProductType }) {
   const [quantity, setQuantity] = useState<number>(1);
   const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false);
-  const addToCart = useCartStore((state) => (state.addToCart))
+  const addToCart = useCartStore((state) => (state.addItem))
 
   const addToCartOnHomepage = async (): Promise<void> => {
     await addToCart(product.id, quantity);

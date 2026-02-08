@@ -67,7 +67,9 @@ describe("Homepage component", () => {
         error: null,
 
         loadCart: mockLoadCart,
-        addToCart: mockAddToCart
+        addItem: mockAddToCart,
+        updateItem: vi.fn(),
+        deleteItem: vi.fn()
       }
 
       if (selector){
