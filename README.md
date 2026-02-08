@@ -71,3 +71,5 @@ export default defineConfig([
   },
 ])
 ```
+
+![Run Tests](https://github.com/ngocthinh09/E-Commerce-SuperSimpleDev/actions/workflows/run-tests.yml/badge.svg)
