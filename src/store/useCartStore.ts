@@ -7,7 +7,9 @@ export interface CartStore {
     isLoading: boolean;
     error: string | null;
     loadCart: () => Promise<void>;
-    addToCart: (itemId: string, quantity?: number) => Promise<void>;
+    addItem: (itemId: string, quantity?: number) => Promise<void>;
+    updateItem: (itemId: string, quantity: number) => Promise<void>;
+    deleteItem: (itemId: string) => Promise<void>;
 }
 
 export const useCartStore = create<CartStore>((set, get) => {
@@ -27,12 +29,24 @@ export const useCartStore = create<CartStore>((set, get) => {
             }
         },
 
-        async addToCart(itemId: string, quantity: number = 1) {
+        async addItem(itemId: string, quantity: number = 1) {
             await axios.post<void>("/api/cart-items", {
                 productId: itemId,
                 quantity: quantity,
             });
 
+            await get().loadCart();
+        },
+
+        async updateItem(itemId: string, quantity: number) {
+            await axios.put<void>(`/api/cart-items/${itemId}`, {
+                quantity: Number(quantity)
+            });
+            await get().loadCart();
+        },
+
+        async deleteItem(itemId: string) {
+            await axios.delete<void>(`/api/cart-items/${itemId}`);
             await get().loadCart();
         }
     };

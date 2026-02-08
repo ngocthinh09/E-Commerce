@@ -1,4 +1,3 @@
-import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useState } from "react";
 import { useCartStore } from "../../store/useCartStore";
@@ -9,16 +8,15 @@ import type { ChangeEvent, KeyboardEvent } from "react";
 function CartItemDetails({ cartItem }: { cartItem: CartItem }) {
   const [isUpdatingQuantity, showIsUpdatingQuantity] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(cartItem.quantity);
-  const loadCart = useCartStore((state) => (state.loadCart));
+  
+  const updateItem = useCartStore((state) => (state.updateItem));
+  const deleteItem = useCartStore((state) => (state.deleteItem));
 
   const updateQuantity = async (): Promise<void> => {
     if (isUpdatingQuantity){
-      await axios.put<void>(`/api/cart-items/${cartItem.productId}`, {
-        quantity: Number(quantity)
-      });
-
+      await updateItem(cartItem.productId, quantity);
+      
       showIsUpdatingQuantity(false);
-      await loadCart();
     }
     else showIsUpdatingQuantity(true);
   };
@@ -38,10 +36,6 @@ function CartItemDetails({ cartItem }: { cartItem: CartItem }) {
     }
   }
 
-  const deleteCartItem = async (): Promise<void> => {
-    await axios.delete(`/api/cart-items/${cartItem.productId}`);
-    await loadCart();
-  };
 
   return (
     <>
@@ -73,7 +67,8 @@ function CartItemDetails({ cartItem }: { cartItem: CartItem }) {
           </span>
           <span
             className="delete-quantity-link link-primary"
-            onClick={deleteCartItem}
+            onClick={() => deleteItem(cartItem.productId)}
+            // onClick={deleteItem.bind(null, cartItem.productId)}
           >
             Delete
           </span>
