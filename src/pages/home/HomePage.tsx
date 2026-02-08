@@ -4,14 +4,10 @@ import { useSearchParams } from "react-router";
 import Header from "../../components/Header";
 import ProductGrid from "./ProductGrid";
 import "./HomePage.css";
-import type { Product, CartItem } from "../../types";
+import type { Product } from "../../types";
 
-interface HomePageProps {
-  cart: CartItem[];
-  loadCart: () => Promise<void>;
-}
 
-function HomePage({ cart, loadCart }: HomePageProps) {
+function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search');
@@ -32,10 +28,10 @@ function HomePage({ cart, loadCart }: HomePageProps) {
       <link rel="icon" type="image/svg+xml" href="favicon/home-favicon.png" />
       <title>Ecommerce Project</title>
 
-      <Header cart={cart} />
+      <Header />
 
       <div className="home-page">
-        <ProductGrid products={products} loadCart={loadCart} />
+        <ProductGrid products={products} />
       </div>
     </>
   );

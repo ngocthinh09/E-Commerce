@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { render, within, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
@@ -6,12 +6,15 @@ import PaymentSummary from "./PaymentSummary";
 import { useLocation } from "react-router";
 import axios from "axios";
 import type { PaymentSummary as PaymentSummaryType } from "../../types";
+import { useCartStore, type CartStore } from "../../store/useCartStore";
 
 vi.mock('axios');
+vi.mock('../../store/useCartStore');
 
 describe("PaymentSummary component", () => {
   let paymentSummary: PaymentSummaryType;
-  let loadCart: () => Promise<void>;
+  let mockLoadCart: Mock;
+  let mockAddToCart: Mock;
 
   beforeEach(() => {
     paymentSummary = {
@@ -23,13 +26,37 @@ describe("PaymentSummary component", () => {
       totalCostCents: 5251,
     };
 
-    loadCart = vi.fn();
+    mockLoadCart = vi.fn();
+    mockAddToCart = vi.fn(async (itemId: string, quantity: number): Promise<void> => {
+      await axios.post('/api/cart-items', {
+        productId: itemId,
+        quantity: quantity,
+      });
+
+      await mockLoadCart();
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vi.mocked(useCartStore).mockImplementation((selector?: any) => {
+      const mockStore: CartStore = {
+        cart: [],
+        isLoading: false,
+        error: null,
+        loadCart: mockLoadCart,
+        addToCart: mockAddToCart
+      }
+
+      if (selector) {
+        return selector(mockStore);
+      }
+      return mockStore;
+    });
   });
 
   it("displays the correct details", () => {
     render(
       <MemoryRouter>
-        <PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />
+        <PaymentSummary paymentSummary={paymentSummary} />
       </MemoryRouter>,
     );
 
@@ -52,7 +79,7 @@ describe("PaymentSummary component", () => {
     
     render(
       <MemoryRouter>
-        <PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />
+        <PaymentSummary paymentSummary={paymentSummary} />
         <Location />
       </MemoryRouter>,
     );
@@ -62,7 +89,7 @@ describe("PaymentSummary component", () => {
     await user.click(placeOrderButton);
 
     expect(axios.post).toHaveBeenCalledWith('/api/orders');
-    expect(loadCart).toHaveBeenCalled();
+    expect(mockLoadCart).toHaveBeenCalled();
     
     expect(
       screen.getByTestId('url-path')

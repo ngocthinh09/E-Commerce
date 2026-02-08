@@ -2,14 +2,16 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import type { CartItem, DeliveryOption } from "../../types";
+import { useCartStore } from "../../store/useCartStore";
 
 interface DeliveryOptionsProps {
   deliveryOptions: DeliveryOption[];
   cartItem: CartItem;
-  loadCart: () => Promise<void>;
 }
 
-function DeliveryOptions({ deliveryOptions, cartItem, loadCart }: DeliveryOptionsProps) {
+function DeliveryOptions({ deliveryOptions, cartItem }: DeliveryOptionsProps) {
+  const loadCart = useCartStore((state) => (state.loadCart));
+
   return (
     <div className="delivery-options">
       <div className="delivery-options-title">Choose a delivery option:</div>

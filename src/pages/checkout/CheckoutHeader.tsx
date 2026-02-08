@@ -3,17 +3,16 @@ import Logo from '../../assets/images/logo.png';
 import MobileLogo from '../../assets/images/mobile-logo.png';
 import CheckoutLockIcon from '../../assets/images/icons/checkout-lock-icon.png';
 import './CheckoutHeader.css';
-import type { CartItem } from '../../types';
+import { useCartStore } from '../../store/useCartStore';
 
-interface CheckoutHeaderProps {
-  cart: CartItem[];
-}
 
-function CheckoutHeader({ cart }: CheckoutHeaderProps) {
+function CheckoutHeader() {
+  const cart = useCartStore((state) => (state.cart));
+
   let totalQuantity = 0;
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;
-  })
+  });
 
   return (
     <div className="checkout-header">

@@ -3,14 +3,10 @@ import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import OrdersGrid from "./OrdersGrid";
 import "./OrdersPage.css";
-import type { CartItem, Order } from "../../types";
+import type { Order } from "../../types";
 
-interface OrdersPageProps {
-  cart: CartItem[];
-  loadCart: () => Promise<void>;
-}
 
-function OrdersPage({ cart, loadCart }: OrdersPageProps) {
+function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
@@ -26,12 +22,12 @@ function OrdersPage({ cart, loadCart }: OrdersPageProps) {
       <link rel="icon" type="image/svg+xml" href="favicon/orders-favicon.png" />
       <title>Orders</title>
 
-      <Header cart={cart} />
+      <Header />
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
 
-        <OrdersGrid orders={orders} loadCart={loadCart} />
+        <OrdersGrid orders={orders} />
       </div>
     </>
   );

@@ -1,13 +1,9 @@
 import type { CSSProperties } from "react";
 import { Link } from "react-router";
 import Header from "../components/Header";
-import type { CartItem } from "../types";
 
-interface NotFoundProps {
-  cart: CartItem[];
-}
 
-function NotFound({ cart }: NotFoundProps) {
+function NotFound() {
   const containerStyle: CSSProperties = {
     textAlign: "center",
     marginTop: "100px",
@@ -29,7 +25,7 @@ function NotFound({ cart }: NotFoundProps) {
 
   return (
     <>
-      <Header cart={cart} />
+      <Header />
       <div style={containerStyle}>
         <div style={messageStyle}>404 - Page not found</div>
         <p>We're sorry, the page you looking for doesn't exist.</p>

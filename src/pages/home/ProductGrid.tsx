@@ -3,15 +3,14 @@ import type { Product } from "../../types";
 
 interface ProductGridProps {
   products: Product[];
-  loadCart: () => Promise<void>;
 }
 
-function ProductGrid({ products, loadCart }: ProductGridProps) {
+function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="products-grid">
       {products.map((product) => {
         return (
-          <ProductComponent key={product.id} product={product} loadCart={loadCart} />
+          <ProductComponent key={product.id} product={product} />
         );
       })}
     </div>

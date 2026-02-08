@@ -1,19 +1,21 @@
-import { it, expect, describe, vi, beforeEach } from "vitest";
+import { it, expect, describe, vi, beforeEach, type Mock } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
 import HomePage from "./HomePage";
 import type { Product } from "../../types";
+import { useCartStore } from "../../store/useCartStore";
+import type { CartStore } from "../../store/useCartStore";
 
 vi.mock("axios");
+vi.mock("../../store/useCartStore");
 
 describe("Homepage component", () => {
-  let loadCart: () => Promise<void>;
+  let mockLoadCart: Mock;
+  let mockAddToCart: Mock;
 
   beforeEach(() => {
-    loadCart = vi.fn();
-
     vi.mocked(axios.get).mockImplementation(async (urlPath: string): Promise<{data: Product[]}> => {
       if (urlPath === "/api/products") {
         return {
@@ -45,12 +47,40 @@ describe("Homepage component", () => {
       }
       return { data: [] };
     });
+
+    mockLoadCart = vi.fn();
+    mockAddToCart = vi.fn(async (itemId: string, quantity: number = 1) => {
+      await axios.post('/api/cart-items', {
+        productId: itemId,
+        quantity: quantity,
+      });
+
+      await mockLoadCart();
+    });
+
+
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vi.mocked(useCartStore).mockImplementation((selector?: any) => {
+      const mockStore : CartStore = {
+        cart: [],
+        isLoading: false,
+        error: null,
+
+        loadCart: mockLoadCart,
+        addToCart: mockAddToCart
+      }
+
+      if (selector){
+        return selector(mockStore);
+      }
+      return mockStore;
+    });
   });
 
   it("display the products correct", async () => {
     render(
       <MemoryRouter>
-        <HomePage cart={[]} loadCart={loadCart} />
+        <HomePage />
       </MemoryRouter>
     );
     const productContainers = await screen.findAllByTestId('product-container');
@@ -68,7 +98,7 @@ describe("Homepage component", () => {
   it('adds each product to the cart', async () => {
     render(
       <MemoryRouter>
-        <HomePage cart={[]} loadCart={loadCart}  />
+        <HomePage  />
       </MemoryRouter>
     );
 
@@ -90,13 +120,13 @@ describe("Homepage component", () => {
       productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
       quantity: 2
     });
-
+  
     expect(axios.post).toHaveBeenNthCalledWith(2, '/api/cart-items', {
       productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
       quantity: 3
     });
 
-    expect(loadCart).toHaveBeenCalledTimes(2);
+    expect(mockLoadCart).toHaveBeenCalledTimes(2);
 
   });
 });

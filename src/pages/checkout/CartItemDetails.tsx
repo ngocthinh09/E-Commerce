@@ -1,17 +1,15 @@
 import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useState } from "react";
+import { useCartStore } from "../../store/useCartStore";
 import type { CartItem } from "../../types";
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-interface CartItemDetailsProps {
-  cartItem: CartItem;
-  loadCart: () => Promise<void>;
-}
 
-function CartItemDetails({ cartItem, loadCart }: CartItemDetailsProps) {
+function CartItemDetails({ cartItem }: { cartItem: CartItem }) {
   const [isUpdatingQuantity, showIsUpdatingQuantity] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(cartItem.quantity);
+  const loadCart = useCartStore((state) => (state.loadCart));
 
   const updateQuantity = async (): Promise<void> => {
     if (isUpdatingQuantity){

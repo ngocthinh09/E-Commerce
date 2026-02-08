@@ -1,12 +1,7 @@
 import OrderProduct from "./OrderProduct";
 import type { Order } from "../../types";
 
-interface OrderDetailsGridProps {
-  order: Order;
-  loadCart: () => Promise<void>;
-}
-
-function OrderDetailsGrid({ order, loadCart }: OrderDetailsGridProps) {
+function OrderDetailsGrid({ order }: { order: Order }) {
   const orderId = order.id;
   
   return (
@@ -14,7 +9,7 @@ function OrderDetailsGrid({ order, loadCart }: OrderDetailsGridProps) {
       {order.products.map((orderProduct) => {
         
         return (
-          <OrderProduct key={orderProduct.product.id} orderId={orderId} orderProduct={orderProduct} loadCart={loadCart} />
+          <OrderProduct key={orderProduct.product.id} orderId={orderId} orderProduct={orderProduct} />
         );
       })}
     </div>

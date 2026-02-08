@@ -1,14 +1,12 @@
 import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useNavigate } from "react-router";
+import { useCartStore } from "../../store/useCartStore";
 import type { PaymentSummary as PaymentSummaryType } from "../../types";
 
-interface PaymentSummaryProps {
-  paymentSummary: PaymentSummaryType;
-  loadCart: () => Promise<void>;
-}
 
-function PaymentSummary({ paymentSummary, loadCart }: PaymentSummaryProps) {
+function PaymentSummary({ paymentSummary }: { paymentSummary: PaymentSummaryType }) {
+  const loadCart = useCartStore((state) => (state.loadCart));
   const navigate = useNavigate();
 
   const createOrder = async () => {

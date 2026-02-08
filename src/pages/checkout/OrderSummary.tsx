@@ -1,15 +1,12 @@
 import DeliveryOptions from "./DeliveryOptions";
 import CartItemDetails from "./CartItemDetails";
 import DeliveryDate from "./DeliveryDate";
-import type { CartItem, DeliveryOption } from "../../types";
+import type { DeliveryOption } from "../../types";
+import { useCartStore } from "../../store/useCartStore";
 
-interface OrderSummary {
-  cart: CartItem[];
-  deliveryOptions: DeliveryOption[];
-  loadCart: () => Promise<void>;
-}
+function OrderSummary({ deliveryOptions }: { deliveryOptions: DeliveryOption[]; }) {
+  const cart = useCartStore((state) => (state.cart));
 
-function OrderSummary({ cart, deliveryOptions, loadCart }: OrderSummary) {
   return (
     <div className="order-summary">
       {deliveryOptions.length > 0 &&
@@ -19,9 +16,9 @@ function OrderSummary({ cart, deliveryOptions, loadCart }: OrderSummary) {
               <DeliveryDate cartItem={cartItem} deliveryOptions={deliveryOptions} />
 
               <div className="cart-item-details-grid">
-                <CartItemDetails cartItem={cartItem} loadCart={loadCart} />
+                <CartItemDetails cartItem={cartItem} />
 
-                <DeliveryOptions cartItem={cartItem} deliveryOptions={deliveryOptions} loadCart={loadCart} />
+                <DeliveryOptions cartItem={cartItem} deliveryOptions={deliveryOptions} />
               </div>
             </div>
           );

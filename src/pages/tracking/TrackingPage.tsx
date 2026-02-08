@@ -5,16 +5,12 @@ import { Link } from 'react-router';
 import { useParams } from 'react-router';
 import Header from '../../components/Header';
 import './TrackingPage.css';
-import type { CartItem, Order } from '../../types';
+import type { Order } from '../../types';
 
-interface TrackingPageProps {
-  cart: CartItem[];
-}
-
-function TrackingPage({ cart }: TrackingPageProps) {
+function TrackingPage() {
   const { orderId, productId } = useParams<{ orderId: string; productId: string }>();
   const [order, setOrder] = useState<Order | null>(null);
-  
+
   useEffect(() => {
     const fetchTrackingData = async () => {
       const response = await axios.get<Order>(`/api/orders/${orderId}?expand=products`);
@@ -45,7 +41,7 @@ function TrackingPage({ cart }: TrackingPageProps) {
       <link rel="icon" type="image/svg+xml" href="favicon/tracking-favicon.png" />
       <title>Tracking</title>
 
-      <Header cart={cart} />
+      <Header />
 
       <div className="tracking-page">
         <div className="order-tracking">

@@ -1,25 +1,17 @@
-import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useState, type ChangeEvent } from "react";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
 import type { Product as ProductType } from "../../types";
+import { useCartStore } from "../../store/useCartStore";
 
-interface ProductProps {
-  product: ProductType;
-  loadCart: () => Promise<void>;
-}
 
-function Product({ product, loadCart } : ProductProps) {
+function Product({ product } : { product: ProductType }) {
   const [quantity, setQuantity] = useState<number>(1);
   const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false);
+  const addToCart = useCartStore((state) => (state.addToCart))
 
-  const addToCart = async (): Promise<void> => {
-    await axios.post<void>("/api/cart-items", {
-      productId: product.id,
-      quantity: quantity,
-    });
-
-    await loadCart();
+  const addToCartOnHomepage = async (): Promise<void> => {
+    await addToCart(product.id, quantity);
 
     setShowAddedMessage(true);
     setTimeout(() => {
@@ -87,7 +79,7 @@ function Product({ product, loadCart } : ProductProps) {
       <button
         className="add-to-cart-button button-primary"
         data-testid="add-to-cart-button"
-        onClick={addToCart}
+        onClick={addToCartOnHomepage}
       >
         Add to Cart
       </button>
