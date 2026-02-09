@@ -1,153 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-green: rgb(8, 79, 45);
+  --color-mint-green: rgb(186, 255, 190);
+
+  --breakpoint-tablet: 800px;
+  --breakpoint-mobile-lg: 675px;
+}
+
 .header {
-  background-color: rgb(8, 79, 45);
-  color: white;
-  padding-left: 15px;
-  padding-right: 15px;
+  @apply bg-dark-green text-white py-3.75;
+  @apply flex items-center justify-between;
+  @apply fixed top-0 left-0 right-0 h-15;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-}
-
-.header .left-section {
-  width: 208px;
-}
-
-@media (max-width: 800px) {
-  .header .left-section {
-    width: unset;
-  }
-}
-
-.header .header-link {
-  display: inline-block;
-  padding: 6px 9.5px;
-  border-radius: 2px;
-  cursor: pointer;
-  text-decoration: none;
-  border: 1px solid rgba(0, 0, 0, 0);
-}
-
-.header .header-link:hover {
-  border: 1px solid white;
-}
-
-.header .logo {
-  height: 26px;
-  margin-top: 1px;
-}
-
-.header .mobile-logo {
-  display: none;
-}
-
-@media (max-width: 675px) {
-  .header .logo {
-    display: none;
+  .left-section {
+    @apply w-52 ml-4;
+    @apply max-tablet:w-auto;
   }
 
-  .header .mobile-logo {
-    display: block;
-    height: 26px;
-    margin-top: 1px;
+  .header-link {
+    @apply inline-block px-[9.5px] py-1.5 rounded-xs no-underline;
+    @apply cursor-pointer border border-transparent;
+
+    &:hover{
+      @apply border-white;
+    }
   }
-}
 
-.header .middle-section {
-  flex: 1;
-  max-width: 850px;
-  margin-left: 10px;
-  margin-right: 10px;
-  display: flex;
-}
+  .logo {
+    @apply h-6.5 mt-px;
+    @apply max-mobile-lg:hidden;
+  }
 
-.header .search-bar {
-  flex: 1;
-  width: 0;
-  font-size: 16px;
-  height: 38px;
-  padding-left: 15px;
-  border: none;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
+  .mobile-logo {
+    @apply hidden;
+    @apply max-mobile-lg:block max-mobile-lg:h-6.5 max-mobile-lg:mt-px;
+  }
 
-.header .search-button {
-  background-color: rgb(186, 255, 190);
-  border: none;
-  width: 45px;
-  height: 40px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  flex-shrink: 0;
-}
+  .middle-section {
+    @apply flex flex-1 max-w-212.5 mx-2.5;
+  }
 
-.header .search-icon {
-  height: 20px;
-  margin-left: 0px;
-  margin-top: 3px;
-}
+  .search-bar {
+    @apply bg-white text-black flex-1 w-0 text-[16px] h-9.5 pl-3.75 border-none rounded-l-[5px] rounded-r-none;
+  }
 
-.header .right-section {
-  width: 180px;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: end;
-}
+  .search-button {
+    @apply bg-mint-green border-none w-11.25 h-9.5 rounded-r-[5px] shrink-0;
+  }
 
-.header .orders-link {
-  color: white;
+  .search-icon {
+    @apply h-5 m-auto;
+  }
 
-  display: flex;
-  align-items: center;
-  padding-left: 13px;
-  padding-right: 13px;
-}
+  .right-section {
+    @apply w-45 shrink-0 flex justify-end;
+  }
 
-.header .orders-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 700;
-}
+  .orders-link {
+    @apply text-white flex items-center px-3.25;
+  }
 
-.header .cart-link {
-  color: white;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
+  .orders-link.active {
+    @apply underline;
+  }
 
-.header .cart-icon {
-  width: 38px;
-}
+  .orders-text {
+    @apply block text-[15px] font-bold;
+  }
 
-.header .cart-text {
-  margin-left: 5px;
-  font-size: 15px;
-  font-weight: 700;
-}
+  .cart-link {
+    @apply text-white flex items-center relative mr-3;
+  }
 
-.header .cart-quantity {
-  color: rgb(8, 79, 45);
-  font-size: 14px;
-  font-weight: 700;
+  .cart-icon {
+    @apply w-9.5;
+  }
 
-  position: absolute;
-  top: 8.5px;
-  right: 46px;
+  .cart-text {
+    @apply ml-1.25 text-[15px] font-bold;
+  }
 
-  width: 26px;
-  text-align: center;
-}
-
-.orders-link.active {
-  text-decoration: underline;
+  .cart-quantity {
+    @apply text-dark-green text-[14px] font-bold absolute top-1.75 right-11.75 w-6.5 text-center;
+  }
 }

@@ -3,6 +3,9 @@
 @theme {
   --color-jungle-green: rgb(25, 135, 84);
   --color-light-gray: rgb(200, 200, 200);
+
+  --breakpoint-xs: 450px;
+  --breakpoint-sm-custom: 575px;
 }
 
 .tracking-page {
@@ -25,21 +28,13 @@
   }
 
   .progress-label {
-    @media (max-width: 450px) {
-        @apply mb-0.75;
-    }
+    @apply max-xs:mb-0.75;
   }
 
   .progress-labels-container {
     @apply flex justify-between text-[20px] font-medium mb-3.75;
-
-    @media (max-width: 575px) {
-      @apply text-[16px];
-    }
-
-    @media (max-width: 450px) {
-        @apply flex-col mb-1.25;
-    }
+    @apply max-sm-custom:text-[16px];
+    @apply max-xs:flex-col max-xs:mb-1.25;
   }
 
   .current-status {
@@ -47,10 +42,10 @@
   }
 
   .progress-bar-container {
-    @apply h-6.25 w-full border border-light-gray rounded-[50px] overflow-hidden;
+    @apply h-6.25 w-full border border-light-gray rounded-full overflow-hidden;
   }
 
   .progress-bar {
-    @apply h-full w-1/2 bg-jungle-green rounded-[50px];
+    @apply h-full w-1/2 bg-jungle-green rounded-full;
   }
 }

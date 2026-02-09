@@ -1,220 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border-light: rgb(222, 222, 222);
+  
+  --breakpoint-tablet: 800px;
+  --breakpoint-sm-custom: 575px;
+  --breakpoint-xs: 450px;
+}
+
 .orders-page {
-  max-width: 850px;
-  margin-top: 90px;
-  margin-bottom: 100px;
-  padding-left: 20px;
-  padding-right: 20px;
+  @apply max-w-212.5 mt-22.5 mb-25 px-5 mx-auto;
 
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.orders-page .page-title {
-  font-weight: 700;
-  font-size: 26px;
-  margin-bottom: 25px;
-}
-
-.orders-page .orders-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 50px;
-}
-
-.orders-page .order-header {
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(222, 222, 222);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 20px 25px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.orders-page .order-header-left-section {
-  display: flex;
-  flex-shrink: 0;
-}
-
-.orders-page .order-header-label {
-  font-weight: 700;
-}
-
-.orders-page .order-date,
-.orders-page .order-total {
-  margin-right: 45px;
-}
-
-.orders-page .order-header-right-section {
-  flex-shrink: 1;
-}
-
-@media (max-width: 575px) {
-  .orders-page .order-header {
-    flex-direction: column;
-    align-items: start;
-    line-height: 23px;
-    padding: 15px;
+  .page-title {
+    @apply font-bold text-[26px] mb-6.25;
   }
 
-  .orders-page .order-header-left-section {
-    flex-direction: column;
+  .orders-grid {
+    @apply grid grid-cols-1 gap-y-12.5;
   }
 
-  .orders-page .order-header-label {
-    margin-right: 5px;
+  .order-header {
+    @apply bg-white border border-border-light flex items-center justify-between p-5 px-6.25 rounded-t-[5px];
+    @apply max-sm-custom:flex-col max-sm-custom:items-start max-sm-custom:leading-5.75 max-sm-custom:p-3.75;
   }
 
-  .orders-page .order-date,
-  .orders-page .order-total {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    margin-right: 0;
+  .order-header-left-section {
+    @apply flex shrink-0;
+    @apply max-sm-custom:flex-col;
   }
 
-  .orders-page .order-header-right-section {
-    display: grid;
-    grid-template-columns: auto 1fr;
-  }
-}
-
-.orders-page .order-details-grid {
-  padding: 40px 25px;
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-
-  display: grid;
-  grid-template-columns: 110px 1fr 220px;
-  column-gap: 35px;
-  row-gap: 60px;
-  align-items: center;
-}
-
-@media (max-width: 800px) {
-  .orders-page .order-details-grid {
-    grid-template-columns: 110px 1fr;
-    row-gap: 0;
-    padding-bottom: 8px;
-  }
-}
-
-@media (max-width: 450px) {
-  .orders-page .order-details-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.orders-page .product-image-container {
-  text-align: center;
-}
-
-.orders-page .product-image-container img {
-  max-width: 110px;
-  max-height: 110px;
-}
-
-.orders-page .product-name {
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.orders-page .product-delivery-date {
-  margin-bottom: 3px;
-}
-
-.orders-page .product-quantity {
-  margin-bottom: 8px;
-}
-
-.orders-page .buy-again-button {
-  font-size: 14px;
-  width: 140px;
-  height: 36px;
-  border-radius: 5px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.orders-page .buy-again-icon {
-  width: 20px;
-  margin-right: 10px;
-}
-
-.orders-page .product-actions {
-  align-self: start;
-}
-
-.orders-page .track-package-button {
-  width: 100%;
-  font-size: 14px;
-  padding: 8px;
-}
-
-@media (max-width: 800px) {
-  .orders-page .buy-again-button {
-    margin-bottom: 10px;
+  .order-header-label {
+    @apply font-bold;
+    @apply max-sm-custom:mr-1.25;
   }
 
-  .orders-page .product-actions {
-    /* grid-column: 2 means this element will be placed
-       in column 2 in the grid. (Normally, the column that
-       an element is placed in is determined by the order
-       of the elements in the HTML. grid-column overrides
-       this default ordering). */
-    grid-column: 2;
-    margin-bottom: 30px;
+  .order-date, .order-total {
+    @apply mr-11.25;
+    @apply max-sm-custom:grid max-sm-custom:grid-cols-[auto_1fr] max-sm-custom:mr-0;
   }
 
-  .orders-page .track-package-button {
-    width: 140px;
-  }
-}
-
-@media (max-width: 450px) {
-  .orders-page .product-image-container {
-    text-align: center;
-    margin-bottom: 25px;
+  .order-header-right-section {
+    @apply shrink;
+    @apply max-sm-custom:grid max-sm-custom:grid-cols-[auto_1fr];
   }
 
-  .orders-page .product-image-container img {
-    max-width: 150px;
-    max-height: 150px;
+  .order-details-grid {
+    @apply p-10 px-6.25 border border-border-light border-t-0 rounded-b-[5px];
+    @apply grid grid-cols-[110px_1fr_220px] gap-x-8.75 gap-y-15 items-center;
+    @apply max-tablet:grid-cols-[110px_1fr] max-tablet:gap-y-0 max-tablet:pb-2;
+    @apply max-xs:grid-cols-1;
   }
 
-  .orders-page .product-name {
-    margin-bottom: 10px;
+  .product-image-container {
+    @apply text-center;
+    @apply max-xs:mb-6.25;
+
+    img {
+      @apply max-w-27.5 max-h-27.5;
+      @apply max-xs:max-w-37.5 max-xs:max-h-37.5;
+    }
   }
 
-  .orders-page .product-quantity {
-    margin-bottom: 15px;
+  .product-name {
+    @apply font-bold mb-1.25;
+    @apply max-xs:mb-2.5;
   }
 
-  .orders-page .buy-again-button {
-    width: 100%;
-    margin-bottom: 15px;
+  .product-delivery-date {
+    @apply mb-0.75;
   }
 
-  .orders-page .product-actions {
-    /* grid-column: auto; undos grid-column: 2; from above.
-      This element will now be placed in its normal column
-      in the grid. */
-    grid-column: auto;
-    margin-bottom: 70px;
+  .product-quantity {
+    @apply mb-2;
+    @apply max-xs:mb-3.75;
   }
 
-  .orders-page .track-package-button {
-    width: 100%;
-    padding: 12px;
+  .buy-again-button {
+    @apply text-[14px] w-35 h-9 rounded-[5px] flex items-center justify-center;
+    @apply max-tablet:mb-2.5;
+    @apply max-xs:w-full max-xs:mb-3.75;
+  }
+
+  .buy-again-icon {
+    @apply w-5 mr-2.5;
+  }
+
+  .product-actions {
+    @apply self-start;
+    @apply max-tablet:col-start-2 max-tablet:mb-7.5;
+    @apply max-xs:col-auto max-xs:mb-17.5;
+  }
+
+  .track-package-button {
+    @apply w-full text-[14px] p-2;
+    @apply max-tablet:w-35;
+    @apply max-xs:w-full max-xs:p-3;
   }
 }
