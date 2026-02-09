@@ -1,81 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-jungle-green: rgb(25, 135, 84);
+  --color-light-gray: rgb(200, 200, 200);
+}
+
 .tracking-page {
-  max-width: 850px;
-  margin-top: 90px;
-  margin-bottom: 100px;
-  padding-left: 30px;
-  padding-right: 30px;
+  @apply max-w-212.5 mt-22.5 mb-25 px-7.5 mx-auto;
 
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.tracking-page .back-to-orders-link {
-  display: inline-block;
-  margin-bottom: 30px;
-}
-
-.tracking-page .delivery-date {
-  font-size: 25px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.tracking-page .product-info {
-  margin-bottom: 3px;
-}
-
-.tracking-page .product-image {
-  max-width: 150px;
-  max-height: 150px;
-  margin-top: 25px;
-  margin-bottom: 50px;
-}
-
-.tracking-page .progress-labels-container {
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-
-.tracking-page .current-status {
-  color: rgb(25, 135, 84);
-}
-
-@media (max-width: 575px) {
-  .tracking-page .progress-labels-container {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 450px) {
-  .tracking-page .progress-labels-container {
-    flex-direction: column;
-    margin-bottom: 5px;
+  .back-to-orders-link {
+    @apply inline-block mb-8;
   }
 
-  .tracking-page .progress-label {
-    margin-bottom: 3px;
+  .delivery-date {
+    @apply text-[25px] font-bold mb-2.5;
   }
-}
 
-.tracking-page .progress-bar-container {
-  height: 25px;
-  width: 100%;
+  .product-info {
+    @apply mb-0.75;
+  }
 
-  border: 1px solid rgb(200, 200, 200);
-  border-radius: 50px;
-  overflow: hidden;
-}
+  .product-image {
+    @apply max-w-37.5 max-h-37.5 mt-6.25 mb-12.5;
+  }
 
-.tracking-page .progress-bar {
-  height: 100%;
-  background-color: rgb(25, 135, 84);
-  border-radius: 50px;
-  width: 50%;
+  .progress-label {
+    @media (max-width: 450px) {
+        @apply mb-0.75;
+    }
+  }
+
+  .progress-labels-container {
+    @apply flex justify-between text-[20px] font-medium mb-3.75;
+
+    @media (max-width: 575px) {
+      @apply text-[16px];
+    }
+
+    @media (max-width: 450px) {
+        @apply flex-col mb-1.25;
+    }
+  }
+
+  .current-status {
+    @apply text-jungle-green;
+  }
+
+  .progress-bar-container {
+    @apply h-6.25 w-full border border-light-gray rounded-[50px] overflow-hidden;
+  }
+
+  .progress-bar {
+    @apply h-full w-1/2 bg-jungle-green rounded-[50px];
+  }
 }
