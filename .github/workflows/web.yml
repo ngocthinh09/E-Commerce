@@ -1,15 +1,22 @@
-name: Node.js CI
+name: Web CI/CD
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'web/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'web/**'
 
 jobs:
   build-and-test:
     runs-on:  ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./web
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -17,10 +24,12 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'web/package-lock.json'
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Run Vitest
       run: npx vitest --run
