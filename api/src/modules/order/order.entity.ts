@@ -12,7 +12,7 @@ export class Order {
   id: string;
 
   @Column({ type: 'bigint', nullable: false })
-  orderTimeMs: string;
+  orderTimeMs: number;
 
   @Column({ type: 'jsonb', nullable: false })
   products: Array<{

@@ -1,14 +1,14 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity('products')
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', nullable: false })
@@ -26,8 +26,8 @@ export class Product {
   @Column({ type: 'integer', nullable: false })
   priceCents: number;
 
-  @Column({ type: 'text', nullable: false })
-  keywords: string;
+  @Column({ type: 'simple-array', nullable: false })
+  keywords: string[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -38,12 +38,4 @@ export class Product {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
-
-  getKeywordsArray(): string[] {
-    return this.keywords.split(',');
-  }
-
-  setKeywordsArray(keywords: string[]): void {
-    this.keywords = keywords.join(',');
-  }
 }
