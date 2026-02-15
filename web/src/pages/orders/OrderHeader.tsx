@@ -4,12 +4,13 @@ import type { Order } from "../../types";
 
 
 function OrderHeader({ order }: { order: Order }) {
+  console.log(order);
   return (
     <div className="order-header">
       <div className="order-header-left-section">
         <div className="order-date">
           <div className="order-header-label">Order Placed:</div>
-          <div>{dayjs(order.orderTimeMs).format("MMMM D")}</div>
+          <div>{dayjs(Number(order.orderTimeMs)).format("MMMM D, YYYY")}</div>
         </div>
         <div className="order-total">
           <div className="order-header-label">Total:</div>

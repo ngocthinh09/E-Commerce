@@ -15,7 +15,7 @@ export class CartItem {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'uuid', nullable: false })
+  @Column({ type: 'uuid', nullable: false, unique: true })
   productId: string;
 
   @ManyToOne(() => Product, { eager: false })

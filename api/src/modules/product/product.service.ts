@@ -13,4 +13,8 @@ export class ProductService {
   findAll(): Promise<Product[]> {
     return this.productRepository.find();
   }
+
+  findOne(id: string): Promise<Product | null> {
+    return this.productRepository.findOneBy({ id: id });
+  }
 }

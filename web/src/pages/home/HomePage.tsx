@@ -14,7 +14,7 @@ function HomePage() {
 
   useEffect(() => {
     const getHomeData = async () => {
-      const url = searchText ? `/api/products?search=${searchText}` : '/api/products';
+      const url = (searchText && searchText.trim().length > 0) ? `/api/products?search=${searchText}` : '/api/products';
       const response = await axios.get<Product[]>(url);
       setProducts(response.data);
     };

@@ -1,37 +1,36 @@
-import { NavLink, useNavigate, useSearchParams } from 'react-router';
-import { useState, type ChangeEvent, type KeyboardEvent } from 'react';
-import { useCartStore } from '../store/useCartStore';
-import WhiteLogo from '../assets/images/logo-white.png';
-import MobileWhiteLogo from '../assets/images/mobile-logo-white.png';
-import SearchIcon from '../assets/images/icons/search-icon.png';
-import CartIcon from '../assets/images/icons/cart-icon.png';
-import './Header.css';
-
+import { NavLink, useNavigate, useSearchParams } from "react-router";
+import { useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { useCartStore } from "../store/useCartStore";
+import WhiteLogo from "../assets/images/logo-white.png";
+import MobileWhiteLogo from "../assets/images/mobile-logo-white.png";
+import SearchIcon from "../assets/images/icons/search-icon.png";
+import CartIcon from "../assets/images/icons/cart-icon.png";
+import "./Header.css";
 
 function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const searchText = searchParams.get('search');
+  const searchText = searchParams.get("search");
 
-  const [search, setSearch] = useState<string>(searchText || '');
+  const [search, setSearch] = useState<string>(searchText || "");
 
-  const cart = useCartStore((state) => (state.cart));
+  const cart = useCartStore((state) => state.cart);
   let totalQuantity: number = 0;
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;
   });
 
-  const updateSearchInput = (event : ChangeEvent<HTMLInputElement>) => {
+  const updateSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
   const searchProducts = () => {
     console.log(`Searching: ${search}`);
-    navigate(`/?search=${search}`)
+    if (search && search.trim().length > 0) navigate(`/?search=${search}`);
   };
 
-  const handleKeyDown = (event : KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
       searchProducts();
     }
   };
@@ -46,17 +45,15 @@ function Header() {
       </div>
 
       <div className="middle-section">
-        <input 
-          className="search-bar" type="text" 
-          placeholder="Search" 
+        <input
+          className="search-bar"
+          type="text"
+          placeholder="Search"
           onChange={updateSearchInput}
           onKeyDown={handleKeyDown}
         />
 
-        <button 
-          className="search-button"
-          onClick={searchProducts}
-        >
+        <button className="search-button" onClick={searchProducts}>
           <img className="search-icon" src={SearchIcon} />
         </button>
       </div>

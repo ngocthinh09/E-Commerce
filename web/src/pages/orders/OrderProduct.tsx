@@ -34,7 +34,7 @@ function OrderProduct ({ orderId, orderProduct }: OrderProductProps) {
           <div className="product-details">
             <div className="product-name">{orderProduct.product.name}</div>
             <div className="product-delivery-date">
-              Arriving on: {dayjs(orderProduct.estimatedDeliveryTimeMs).format("MMMM D")}
+              Arriving on: {dayjs(Number(orderProduct.estimatedDeliveryTimeMs)).format("MMMM D, YYYY")}
             </div>
             <div className="product-quantity">
               Quantity: {orderProduct.quantity}
