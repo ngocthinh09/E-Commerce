@@ -12,6 +12,8 @@ import { CartItemService } from './cart-item.service';
 import { CartItem } from './cart-item.entity';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product.entity';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { CreateItemDto } from './dto/create-item.dto';
 
 @Controller('cart-items')
 export class CartItemController {
@@ -38,16 +40,14 @@ export class CartItemController {
   }
 
   @Post()
-  createCartItem(
-    @Body() { productId, quantity }: { productId: string; quantity: number },
-  ) {
+  createCartItem(@Body() { productId, quantity }: CreateItemDto) {
     return this.cartItemService.createCartItem(productId, quantity);
   }
 
   @Put(':productId')
   updateCartItem(
     @Param('productId') productId: string,
-    @Body() body: { quantity?: number; deliveryOptionId?: string },
+    @Body() body: UpdateItemDto,
   ) {
     return this.cartItemService.updateCartItem({
       productId: productId,

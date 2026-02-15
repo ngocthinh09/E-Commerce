@@ -74,4 +74,8 @@ export class OrderService {
 
     return newOrder;
   }
+
+  removeAllOrder() {
+    return this.orderRepository.clear();
+  }
 }

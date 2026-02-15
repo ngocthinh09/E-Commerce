@@ -9,6 +9,7 @@ import { DeliveryOptionModule } from './modules/delivery-option/delivery-option.
 import { PaymentSummaryModule } from './modules/payment-summary/payment-summary.module';
 import { CartItemModule } from './modules/cart-item/cart-item.module';
 import { OrderModule } from './modules/order/order.module';
+import { ResetModule } from './modules/reset/reset.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { OrderModule } from './modules/order/order.module';
     PaymentSummaryModule,
     CartItemModule,
     OrderModule,
+    ResetModule,
   ],
   controllers: [AppController],
   providers: [AppService],

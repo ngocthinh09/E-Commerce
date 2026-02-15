@@ -16,5 +16,6 @@ import { DeliveryOptionModule } from '../delivery-option/delivery-option.module'
   ],
   controllers: [OrderController],
   providers: [OrderService],
+  exports: [OrderService],
 })
 export class OrderModule {}
