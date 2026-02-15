@@ -27,6 +27,6 @@ import { OrderModule } from './modules/order/order.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes('', '{*path}');
+    consumer.apply(LoggingMiddleware).forRoutes('{*path}');
   }
 }
