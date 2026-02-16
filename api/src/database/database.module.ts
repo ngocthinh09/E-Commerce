@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from '../modules/product/product.entity';
-import { DeliveryOption } from '../modules/delivery-option/delivery-option.entity';
-import { CartItem } from '../modules/cart-item/cart-item.entity';
-import { Order } from '../modules/order/order.entity';
 
 @Module({
   imports: [
@@ -13,13 +9,12 @@ import { Order } from '../modules/order/order.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        entities: [Product, DeliveryOption, CartItem, Order],
-        synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        url: configService.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        synchronize: configService.get<string>('NODE_ENV') === 'development',
       }),
     }),
   ],
