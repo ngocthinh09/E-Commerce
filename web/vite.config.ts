@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_API_SERVICE,
           changeOrigin: true,
-          secure: false,
+          secure: true,
         },
       },
     },
