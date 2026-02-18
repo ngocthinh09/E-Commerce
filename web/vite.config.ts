@@ -11,9 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://e-commerce-oqef.onrender.com',
-        changeOrigin: true,
-        secure: true,
+        target: 'http://localhost:3000',
       },
     },
   },
