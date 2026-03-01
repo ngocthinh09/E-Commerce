@@ -4,6 +4,6 @@ import { defaultCart } from '../data/cart';
 
 export async function seedCart(dataSource: DataSource) {
   const cartRepository = dataSource.getRepository(CartItem);
-  await cartRepository.upsert(defaultCart, ['id']);
+  await cartRepository.upsert(defaultCart, ['userId', 'productId']);
   console.log('Cart items seeded succesfully!');
 }

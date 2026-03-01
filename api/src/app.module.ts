@@ -10,10 +10,13 @@ import { PaymentSummaryModule } from './modules/payment-summary/payment-summary.
 import { CartItemModule } from './modules/cart-item/cart-item.module';
 import { OrderModule } from './modules/order/order.module';
 import { ResetModule } from './modules/reset/reset.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: '.env',
       isGlobal: true,
     }),
     DatabaseModule,
@@ -23,6 +26,8 @@ import { ResetModule } from './modules/reset/reset.module';
     CartItemModule,
     OrderModule,
     ResetModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

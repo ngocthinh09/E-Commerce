@@ -5,6 +5,7 @@ import { Product } from '../modules/product/product.entity';
 import { DeliveryOption } from '../modules/delivery-option/delivery-option.entity';
 import { CartItem } from '../modules/cart-item/cart-item.entity';
 import { Order } from '../modules/order/order.entity';
+import { User } from '../modules/user/user.entity';
 
 @Module({
   imports: [
@@ -12,13 +13,13 @@ import { Order } from '../modules/order/order.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: configService.get<string>('DB_DRIVER') as any,
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Product, DeliveryOption, CartItem, Order],
+        entities: [User, Product, DeliveryOption, CartItem, Order],
         synchronize: configService.get<string>('NODE_ENV') !== 'production',
       }),
     }),

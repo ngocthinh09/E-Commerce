@@ -6,19 +6,29 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Unique,
 } from 'typeorm';
 import { DeliveryOption } from '../delivery-option/delivery-option.entity';
 import { Product } from '../product/product.entity';
+import { User } from '../user/user.entity';
 
 @Entity('cart_items')
+@Unique(['userId', 'productId'])
 export class CartItem {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @Column({ type: 'uuid', nullable: false })
+  userId: string;
+
+  @ManyToOne(() => User, (user) => user.cartItems, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
   @Column({ type: 'uuid', nullable: false, unique: true })
   productId: string;
 
-  @ManyToOne(() => Product, { eager: false })
+  @ManyToOne(() => Product, { eager: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'productId' })
   product: Product;
 

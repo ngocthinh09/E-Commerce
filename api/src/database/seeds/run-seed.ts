@@ -5,12 +5,14 @@ import { seedProducts } from './scripts/product.seed';
 import { seedDeliveryOptions } from './scripts/delivery-option.seed';
 import { seedOrder } from './scripts/order.seed';
 import { seedCart } from './scripts/cart.seed';
+import { seedUsers } from './scripts/user.seed';
 
 async function runSeeds() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const dataSource = app.get(DataSource);
 
   try {
+    await seedUsers(dataSource);
     await seedProducts(dataSource);
     await seedDeliveryOptions(dataSource);
     await seedCart(dataSource);

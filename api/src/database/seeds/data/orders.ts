@@ -1,6 +1,7 @@
 export const defaultOrders = [
   {
     id: '27cba69d-4c3d-4098-b42d-ac7fa62b7664',
+    userId: '1e5bbcb5-5a02-4193-87b2-8eefb8bcad5b',
     orderTimeMs: '1723456800000',
     totalCostCents: 3506,
     products: [
@@ -18,6 +19,7 @@ export const defaultOrders = [
   },
   {
     id: 'b6b6c212-d30e-4d4a-805d-90b52ce6b37d',
+    userId: '1e5bbcb5-5a02-4193-87b2-8eefb8bcad5b',
     orderTimeMs: '1718013600000',
     totalCostCents: 4190,
     products: [

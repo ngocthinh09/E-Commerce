@@ -12,8 +12,8 @@ import { CartItemService } from './cart-item.service';
 import { CartItem } from './cart-item.entity';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product.entity';
-import { UpdateItemDto } from './dto/update-item.dto';
-import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dtos/update-item.dto';
+import { CreateItemDto } from './dtos/create-item.dto';
 
 @Controller('cart-items')
 export class CartItemController {
