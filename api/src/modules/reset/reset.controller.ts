@@ -1,8 +1,17 @@
-import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CartItemService } from '../cart-item/cart-item.service';
 import { OrderService } from '../order/order.service';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { User } from '../../common/decorators/user.decorator';
 
 @Controller('reset')
+@UseGuards(JwtAuthGuard)
 export class ResetController {
   constructor(
     private readonly cartItemService: CartItemService,
@@ -11,8 +20,8 @@ export class ResetController {
 
   @Post()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async reset() {
-    await this.cartItemService.removeAllItems();
-    await this.orderService.removeAllOrder();
+  async reset(@User('id') userId: string) {
+    await this.cartItemService.removeAllItems(userId);
+    await this.orderService.removeAllOrder(userId);
   }
 }

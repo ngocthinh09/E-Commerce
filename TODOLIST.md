@@ -31,18 +31,18 @@
 ## Phase 2: Backend - Bảo vệ Routes & Lọc theo User
 
 ### 2.1 Áp dụng Auth Guard cho các route
-- [ ] Áp dụng `@UseGuards(JwtAuthGuard)` cho `CartItemController`
-- [ ] Áp dụng `@UseGuards(JwtAuthGuard)` cho `OrderController`
-- [ ] Áp dụng `@UseGuards(JwtAuthGuard)` cho `PaymentSummaryController`
-- [ ] Tạo custom decorator `@CurrentUser()` để extract user từ request
+- [x] Áp dụng `@UseGuards(JwtAuthGuard)` cho `CartItemController`
+- [x] Áp dụng `@UseGuards(JwtAuthGuard)` cho `OrderController`
+- [x] Áp dụng `@UseGuards(JwtAuthGuard)` cho `PaymentSummaryController`
+- [x] Tạo custom decorator `@CurrentUser()` để extract user từ request
 
 ### 2.2 Cập nhật Service & Controller để lọc theo User
-- [ ] `CartItemService` - tất cả query thêm điều kiện `where: { userId }`
-- [ ] `CartItemController` - truyền `userId` từ `@CurrentUser()` vào service
-- [ ] `OrderService` - tất cả query thêm điều kiện `where: { userId }`
-- [ ] `OrderController` - truyền `userId` từ `@CurrentUser()` vào service
-- [ ] `PaymentSummaryService` - tính toán dựa trên cart của user hiện tại
-- [ ] Cập nhật `create-item.dto.ts` (bỏ userId khỏi body, lấy từ token)
+- [x] `CartItemService` - tất cả query thêm điều kiện `where: { userId }`
+- [x] `CartItemController` - truyền `userId` từ `@CurrentUser()` vào service
+- [x] `OrderService` - tất cả query thêm điều kiện `where: { userId }`
+- [x] `OrderController` - truyền `userId` từ `@CurrentUser()` vào service
+- [x] `PaymentSummaryService` - tính toán dựa trên cart của user hiện tại
+- [x] Cập nhật `create-item.dto.ts` (bỏ userId khỏi body, lấy từ token)
 
 ### 2.3 Testing Backend
 - [ ] Viết unit test cho `AuthService` (signup, login, validate)

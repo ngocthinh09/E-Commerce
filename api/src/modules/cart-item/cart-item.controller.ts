@@ -7,6 +7,7 @@ import {
   Post,
   Body,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CartItemService } from './cart-item.service';
 import { CartItem } from './cart-item.entity';
@@ -14,8 +15,11 @@ import { ProductService } from '../product/product.service';
 import { Product } from '../product/product.entity';
 import { UpdateItemDto } from './dtos/update-item.dto';
 import { CreateItemDto } from './dtos/create-item.dto';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { User } from '../../common/decorators/user.decorator';
 
 @Controller('cart-items')
+@UseGuards(JwtAuthGuard)
 export class CartItemController {
   constructor(
     private readonly cartItemService: CartItemService,
@@ -23,8 +27,8 @@ export class CartItemController {
   ) {}
 
   @Get()
-  async findAll(@Query('expand') expand: string) {
-    const cartItems = await this.cartItemService.findAll();
+  async findAll(@User('id') userId: string, @Query('expand') expand: string) {
+    const cartItems = await this.cartItemService.findAll(userId);
     if (expand === 'product') {
       const response: CartItem[] = [];
       for (const item of cartItems) {
@@ -40,24 +44,36 @@ export class CartItemController {
   }
 
   @Post()
-  createCartItem(@Body() { productId, quantity }: CreateItemDto) {
-    return this.cartItemService.createCartItem(productId, quantity);
+  createCartItem(
+    @User('id') userId: string,
+    @Body() createItemDto: CreateItemDto,
+  ) {
+    return this.cartItemService.createCartItem(userId, createItemDto);
   }
 
   @Put(':productId')
   updateCartItem(
+    @User('id') userId: string,
     @Param('productId') productId: string,
-    @Body() body: UpdateItemDto,
+    @Body() updateItemDto: UpdateItemDto,
   ) {
-    return this.cartItemService.updateCartItem({
-      productId: productId,
-      quantity: body?.quantity,
-      deliveryOptionId: body?.deliveryOptionId,
-    });
+    return this.cartItemService.updateCartItem(
+      userId,
+      productId,
+      updateItemDto,
+    );
+  }
+
+  @Delete()
+  removeAllItems(@User('id') userId: string) {
+    return this.cartItemService.removeAllItems(userId);
   }
 
   @Delete('/:productId')
-  removeItem(@Param('productId') productId: string) {
-    return this.cartItemService.removeItem(productId);
+  removeItem(
+    @User('id') userId: string,
+    @Param('productId') productId: string,
+  ) {
+    return this.cartItemService.removeItem(userId, productId);
   }
 }

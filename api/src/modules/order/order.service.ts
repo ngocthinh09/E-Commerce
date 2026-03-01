@@ -16,20 +16,22 @@ export class OrderService {
     private readonly delOptService: DeliveryOptionService,
   ) {}
 
-  findAll() {
+  findAll(userId: string) {
     return this.orderRepository.find({
-      order: {
-        orderTimeMs: 'DESC',
-      },
+      where: { userId },
+      order: { orderTimeMs: 'DESC' },
     });
   }
 
-  findOne(id: string) {
-    return this.orderRepository.findOneBy({ id: id });
+  // id -> orderId
+  findOne(userId: string, id: string) {
+    return this.orderRepository.findOne({
+      where: { id, userId },
+    });
   }
 
-  async createOrder() {
-    const cartItems = await this.cartItemService.findAll();
+  async createOrder(userId: string) {
+    const cartItems = await this.cartItemService.findAll(userId);
     if (cartItems.length === 0) {
       throw new HttpException('Cart is empty', HttpStatus.BAD_REQUEST);
     }
@@ -64,18 +66,19 @@ export class OrderService {
 
     totalCostCents = Math.round(totalCostCents * 1.1);
     const newOrder = this.orderRepository.create({
+      userId,
       orderTimeMs: String(Date.now()),
       totalCostCents,
       products,
     });
 
     await this.orderRepository.save(newOrder);
-    await this.cartItemService.removeAllItems();
+    await this.cartItemService.removeAllItems(userId);
 
     return newOrder;
   }
 
-  removeAllOrder() {
-    return this.orderRepository.clear();
+  removeAllOrder(userId: string) {
+    return this.orderRepository.delete({ userId });
   }
 }

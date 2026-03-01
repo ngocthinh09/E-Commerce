@@ -6,11 +6,15 @@ import {
   HttpStatus,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { ProductService } from '../product/product.service';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { User } from '../../common/decorators/user.decorator';
 
 @Controller('orders')
+@UseGuards(JwtAuthGuard)
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
@@ -18,8 +22,8 @@ export class OrderController {
   ) {}
 
   @Get()
-  async findAll(@Query('expand') expand: string) {
-    let orders = await this.orderService.findAll();
+  async findAll(@User('id') userId: string, @Query('expand') expand: string) {
+    let orders = await this.orderService.findAll(userId);
     if (expand === 'products') {
       orders = await Promise.all(
         orders.map(async (order) => {
@@ -49,8 +53,9 @@ export class OrderController {
   async findOne(
     @Param('orderId') orderId: string,
     @Query('expand') expand: string,
+    @User('id') userId: string,
   ) {
-    const order = await this.orderService.findOne(orderId);
+    const order = await this.orderService.findOne(userId, orderId);
 
     if (!order) {
       throw new HttpException(
@@ -85,7 +90,7 @@ export class OrderController {
   }
 
   @Post()
-  createOrder() {
-    return this.orderService.createOrder();
+  createOrder(@User('id') userId: string) {
+    return this.orderService.createOrder(userId);
   }
 }

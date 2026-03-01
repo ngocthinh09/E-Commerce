@@ -20,8 +20,8 @@ export class PaymentSummaryService {
     private readonly cartItemService: CartItemService,
   ) {}
 
-  async getPaymentSummary(): Promise<PaymentSummary> {
-    const cartItems = await this.cartItemService.findAll();
+  async getPaymentSummary(userId: string): Promise<PaymentSummary> {
+    const cartItems = await this.cartItemService.findAll(userId);
     let totalItems = 0;
     let productCostCents = 0;
     let shippingCostCents = 0;

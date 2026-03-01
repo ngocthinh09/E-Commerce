@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { DeleteResult } from 'typeorm';
 import { ProductService } from '../product/product.service';
 import { DeliveryOptionService } from '../delivery-option/delivery-option.service';
+import { CreateItemDto } from './dtos/create-item.dto';
+import { UpdateItemDto } from './dtos/update-item.dto';
 
 @Injectable()
 export class CartItemService {
@@ -15,15 +17,15 @@ export class CartItemService {
     private readonly delOptService: DeliveryOptionService,
   ) {}
 
-  findAll(): Promise<CartItem[]> {
+  findAll(userId: string): Promise<CartItem[]> {
     return this.cartItemRepository.find({
-      order: {
-        id: 'ASC',
-      },
+      where: { userId },
+      order: { createdAt: 'DESC' },
     });
   }
 
-  async createCartItem(productId: string, quantity: number) {
+  async createCartItem(userId: string, createItemDto: CreateItemDto) {
+    const { productId, quantity } = createItemDto;
     const product = await this.productService.findOne(productId);
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
@@ -36,11 +38,14 @@ export class CartItemService {
       );
     }
 
-    let cartItem = await this.cartItemRepository.findOneBy({ productId });
+    let cartItem = await this.cartItemRepository.findOne({
+      where: { userId, productId },
+    });
     if (cartItem) {
       cartItem.quantity += quantity;
     } else {
       cartItem = this.cartItemRepository.create({
+        userId,
         productId,
         quantity,
         deliveryOptionId: '1',
@@ -51,50 +56,50 @@ export class CartItemService {
     return cartItem;
   }
 
-  async updateCartItem(args: {
-    productId: string;
-    quantity: number | undefined;
-    deliveryOptionId: string | undefined;
-  }) {
-    const cartItem = await this.cartItemRepository.findOneBy({
-      productId: args.productId,
+  async updateCartItem(
+    userId: string,
+    productId: string,
+    updateItemDto: UpdateItemDto,
+  ) {
+    const cartItem = await this.cartItemRepository.findOne({
+      where: { userId, productId },
     });
     if (!cartItem) {
       throw new HttpException('Cart item not found', HttpStatus.NOT_FOUND);
     }
 
-    if (args.quantity !== undefined) {
-      if (args.quantity < 1) {
+    const { quantity, deliveryOptionId } = updateItemDto;
+
+    if (quantity !== undefined) {
+      if (quantity < 1) {
         throw new HttpException(
           'Quantity must be a number greater than 0',
           HttpStatus.BAD_REQUEST,
         );
       }
-      cartItem.quantity = args.quantity;
+      cartItem.quantity = quantity;
     }
 
-    if (args.deliveryOptionId !== undefined) {
-      const deliveryOption = await this.delOptService.findOne(
-        args.deliveryOptionId,
-      );
+    if (deliveryOptionId !== undefined) {
+      const deliveryOption = await this.delOptService.findOne(deliveryOptionId);
       if (!deliveryOption) {
         throw new HttpException(
           'Invalid delivery option',
           HttpStatus.BAD_REQUEST,
         );
       }
-      cartItem.deliveryOptionId = args.deliveryOptionId;
+      cartItem.deliveryOptionId = deliveryOptionId;
     }
 
     await this.cartItemRepository.save(cartItem);
     return cartItem;
   }
 
-  removeItem(productId: string): Promise<DeleteResult> {
-    return this.cartItemRepository.delete({ productId: productId });
+  removeItem(userId: string, productId: string): Promise<DeleteResult> {
+    return this.cartItemRepository.delete({ userId, productId });
   }
 
-  removeAllItems(): Promise<void> {
-    return this.cartItemRepository.clear();
+  removeAllItems(userId: string): Promise<DeleteResult> {
+    return this.cartItemRepository.delete({ userId });
   }
 }
