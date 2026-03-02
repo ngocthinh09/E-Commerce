@@ -1,8 +1,8 @@
-import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import { useNavigate } from "react-router";
 import { useCartStore } from "../../store/useCartStore";
 import type { PaymentSummary as PaymentSummaryType } from "../../types";
+import { orderService } from "../../services/OrderService";
 
 
 function PaymentSummary({ paymentSummary }: { paymentSummary: PaymentSummaryType }) {
@@ -10,7 +10,7 @@ function PaymentSummary({ paymentSummary }: { paymentSummary: PaymentSummaryType
   const navigate = useNavigate();
 
   const createOrder = async () => {
-    await axios.post('/api/orders');
+    await orderService.postOrder();
     await loadCart();
     navigate('/orders')
   };

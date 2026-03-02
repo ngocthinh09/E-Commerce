@@ -17,7 +17,12 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signup(createUserDto);
+    const user = await this.authService.signup(createUserDto);
+    const userPayload = {
+      id: user.id,
+      username: user.username,
+    };
+    return this.authService.login(userPayload);
   }
 
   @UseGuards(LocalAuthGuard)

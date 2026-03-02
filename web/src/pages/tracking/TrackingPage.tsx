@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import { Link } from 'react-router';
 import { useParams } from 'react-router';
 import Header from '../../components/Header';
 import './TrackingPage.css';
 import type { Order } from '../../types';
+import { orderService } from '../../services/OrderService';
 
 function TrackingPage() {
   const { orderId, productId } = useParams<{ orderId: string; productId: string }>();
@@ -13,7 +13,7 @@ function TrackingPage() {
 
   useEffect(() => {
     const fetchTrackingData = async () => {
-      const response = await axios.get<Order>(`/api/orders/${orderId}?expand=products`);
+      const response = await orderService.getOrderById(orderId);
       setOrder(response.data);
     }
     fetchTrackingData();

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import CheckoutHeader from "./CheckoutHeader";
 import OrderSummary from "./OrderSummary";
@@ -9,6 +8,8 @@ import type {
   PaymentSummary as PaymentSummaryType,
 } from "../../types";
 import { useCartStore } from "../../store/useCartStore";
+import { paymentSummaryService } from "../../services/PaymentSummaryService";
+import { deliveryOptionsService } from "../../services/DeliveryOptionsService";
 
 
 function CheckoutPage() {
@@ -18,7 +19,7 @@ function CheckoutPage() {
 
   useEffect(() => {
     const fetchCheckoutData = async () => {
-      const response = await axios.get<DeliveryOption[]>("/api/delivery-options?expand=estimatedDeliveryTime");
+      const response = await deliveryOptionsService.getDeliveryOptions();
       setDeliveryOptions(response.data);
     };
     fetchCheckoutData();
@@ -26,7 +27,7 @@ function CheckoutPage() {
 
   useEffect(() => {
     const fetchPaymentSummay = async () => {
-      const response = await axios.get<PaymentSummaryType>("/api/payment-summary");
+      const response = await paymentSummaryService.getPaymentSummary();
       setPaymentSummary(response.data);
     };
     fetchPaymentSummay();

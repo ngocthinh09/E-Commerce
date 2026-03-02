@@ -14,7 +14,7 @@ function CartItemDetails({ cartItem }: { cartItem: CartItem }) {
 
   const updateQuantity = async (): Promise<void> => {
     if (isUpdatingQuantity){
-      await updateItem(cartItem.productId, quantity);
+      await updateItem(cartItem.productId, { quantity });
       
       showIsUpdatingQuantity(false);
     }

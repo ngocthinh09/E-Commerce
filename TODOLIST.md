@@ -53,25 +53,26 @@
 ## Phase 3: Frontend - Auth Pages & State Management
 
 ### 3.1 Auth State Management
-- [ ] Cài đặt dependency (nếu cần): `axios` hoặc cấu hình fetch interceptor
-- [ ] Tạo `useAuthStore.ts` (Zustand) - state: `user`, `token`, `isAuthenticated`
-- [ ] Implement actions: `login()`, `signup()`, `logout()`, `loadUser()`
-- [ ] Lưu JWT token vào `localStorage`
-- [ ] Tạo utility/interceptor để tự động gắn `Authorization: Bearer <token>` vào mọi request
+- [x] Cài đặt dependency (nếu cần): `axios` hoặc cấu hình fetch interceptor
+- [x] Tạo `useAuthStore.ts` (Zustand) - state: `user`, `token`, `isAuthenticated`
+- [x] Implement actions: `login()`, `signup()`, `logout()`, `loadUser()`
+- [x] Lưu JWT token vào `localStorage`
+- [x] Tạo utility/interceptor để tự động gắn `Authorization: Bearer <token>` vào mọi request
 
 ### 3.2 Tạo Auth Pages
-- [ ] Tạo folder `src/pages/auth/`
-- [ ] Tạo `LoginPage.tsx` - form với email & password, nút "Sign In"
-- [ ] Tạo `SignUpPage.tsx` - form với name, email, password, confirm password, nút "Sign Up"
-- [ ] Tạo `AuthPage.css` - styling cho login/signup pages
-- [ ] Thêm link chuyển đổi giữa Login ↔ Sign Up
-- [ ] Hiển thị error message khi login/signup thất bại
-- [ ] Redirect về HomePage sau khi login/signup thành công
+- [x] Tạo folder `src/pages/auth/`
+- [x] Tạo `LoginPage.tsx` - form với email & password, nút "Sign In"
+- [x] Tạo `SignUpPage.tsx` - form với name, email, password, confirm password, nút "Sign Up"
+- [x] Thêm link chuyển đổi giữa Login ↔ Sign Up
+- [x] Hiển thị error message khi login thất bại
+- [ ] Hiển thị error message khi signup thất bại
+- [x] Redirect về HomePage sau khi login thành công
+- [ ] Redirect về HomePage sau khi signup thành công
 
 ### 3.3 Cập nhật Routing
-- [ ] Thêm route `/login` → `LoginPage`
-- [ ] Thêm route `/signup` → `SignUpPage`
-- [ ] Tạo `ProtectedRoute` component (redirect về `/login` nếu chưa đăng nhập)
+- [x] Thêm route `/auth/login` → `LoginPage`
+- [x] Thêm route `/auth/signup` → `SignUpPage`
+- [ ] Tạo `ProtectedRoute` component (redirect về `/auth/login` nếu chưa đăng nhập)
 - [ ] Bọc các route `/checkout`, `/orders`, `/tracking` bằng `ProtectedRoute`
 - [ ] Route `/` (HomePage) vẫn public, nhưng nút "Add to Cart" yêu cầu đăng nhập
 

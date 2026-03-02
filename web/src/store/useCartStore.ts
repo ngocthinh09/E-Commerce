@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import axiosClient from "../api/axiosClient";
 import type { CartItem } from "../types";
 
 export interface CartStore {
@@ -8,7 +8,7 @@ export interface CartStore {
     error: string | null;
     loadCart: () => Promise<void>;
     addItem: (itemId: string, quantity?: number) => Promise<void>;
-    updateItem: (itemId: string, quantity: number) => Promise<void>;
+    updateItem: (itemId: string, updateData: {quantity?: number; deliveryOptionId?: string;}) => Promise<void>;
     deleteItem: (itemId: string) => Promise<void>;
 }
 
@@ -21,7 +21,7 @@ export const useCartStore = create<CartStore>((set, get) => {
         async loadCart() {
             set({ isLoading: true, error: null });
             try {
-                const response = await axios.get<CartItem[]>('/api/cart-items?expand=product');
+                const response = await axiosClient.get<CartItem[]>('/api/cart-items?expand=product');
                 set({ cart: response.data, isLoading: false });
             } catch (error) {
                 console.log('Failed to load cart: ', error);
@@ -30,7 +30,7 @@ export const useCartStore = create<CartStore>((set, get) => {
         },
 
         async addItem(itemId: string, quantity: number = 1) {
-            await axios.post<void>("/api/cart-items", {
+            await axiosClient.post<void>("/api/cart-items", {
                 productId: itemId,
                 quantity: quantity,
             });
@@ -38,15 +38,13 @@ export const useCartStore = create<CartStore>((set, get) => {
             await get().loadCart();
         },
 
-        async updateItem(itemId: string, quantity: number) {
-            await axios.put<void>(`/api/cart-items/${itemId}`, {
-                quantity: Number(quantity)
-            });
+        async updateItem(itemId: string, updateData: {quantity?: number; deliveryOptionId?: string;}) {
+            await axiosClient.put<void>(`/api/cart-items/${itemId}`, updateData);
             await get().loadCart();
         },
 
         async deleteItem(itemId: string) {
-            await axios.delete<void>(`/api/cart-items/${itemId}`);
+            await axiosClient.delete<void>(`/api/cart-items/${itemId}`);
             await get().loadCart();
         }
     };

@@ -25,7 +25,7 @@ export class CartItem {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'uuid', nullable: false, unique: true })
+  @Column({ type: 'uuid', nullable: false })
   productId: string;
 
   @ManyToOne(() => Product, { eager: false, onDelete: 'CASCADE' })

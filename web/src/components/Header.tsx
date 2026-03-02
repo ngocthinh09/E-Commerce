@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, useSearchParams } from "react-router";
-import { useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useCartStore } from "../store/useCartStore";
 import WhiteLogo from "../assets/images/logo-white.png";
 import MobileWhiteLogo from "../assets/images/mobile-logo-white.png";
@@ -11,10 +11,14 @@ function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get("search");
-
   const [search, setSearch] = useState<string>(searchText || "");
 
+  const loadCart = useCartStore((state) => (state.loadCart));
+  useEffect(() => {
+    loadCart();
+  }, [loadCart])
   const cart = useCartStore((state) => state.cart);
+  
   let totalQuantity: number = 0;
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;

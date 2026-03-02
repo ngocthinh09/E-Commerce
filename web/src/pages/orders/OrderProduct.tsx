@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Fragment } from "react";
 import dayjs from "dayjs";
 import BuyAgainIcon from "../../assets/images/icons/buy-again.png";
@@ -12,16 +11,11 @@ interface OrderProductProps {
 }
 
 function OrderProduct ({ orderId, orderProduct }: OrderProductProps) {
-  const loadCart = useCartStore((state) => (state.loadCart));
+  const addItem = useCartStore((state) => (state.addItem));
 
   const productId = orderProduct.productId;
   const addToCart = async () => {
-      await axios.post("/api/cart-items", {
-          productId: productId,
-          quantity: 1,
-      });
-
-      await loadCart();
+      await addItem(productId, 1);
   };
 
 
