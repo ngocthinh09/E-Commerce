@@ -6,6 +6,7 @@ import MobileWhiteLogo from "../assets/images/mobile-logo-white.png";
 import SearchIcon from "../assets/images/icons/search-icon.png";
 import CartIcon from "../assets/images/icons/cart-icon.png";
 import "./Header.css";
+import { DropdownMenuAvatar } from "./DropdownMenuAvatar";
 
 function Header() {
   const navigate = useNavigate();
@@ -72,6 +73,10 @@ function Header() {
           <div className="cart-quantity">{totalQuantity}</div>
           <div className="cart-text">Cart</div>
         </NavLink>
+
+        <div className="flex justify-center items-center">
+          <DropdownMenuAvatar />
+        </div>
       </div>
     </div>
   );

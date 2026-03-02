@@ -3,7 +3,6 @@ import SmallLogo from "../../assets/images/mobile-logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router";
 
-
 export interface SignupData {
   username: string;
   name?: string;
@@ -12,27 +11,46 @@ export interface SignupData {
 
 export default function SignupPage() {
   const [fields, setFields] = useState<SignupData>({
-    username: '',
-    name: '',
-    password: '',
+    username: "",
+    name: "",
+    password: "",
   });
-  
+
   const changeFieldsValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFields((prev) => ({
       ...prev,
       [name]: value,
     }));
+    if (error) setError(null);
   };
-  
+
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const changeConfirmPassword = (event: ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(event.target.value);
+    if (error) setError(null);
+  };
+
   const navigate = useNavigate();
   const signup = useAuthStore((state) => state.signup);
-  const isLoading = useAuthStore((state) => (state.isLoading));
+  const isLoading = useAuthStore((state) => state.isLoading);
   const handleSignup = async (event: SyntheticEvent) => {
     event.preventDefault();
+
+    if (fields.password !== confirmPassword) {
+      setError("Password does not match!");
+      return;
+    }
+
+    if (fields.password.trim().length < 6) {
+      setError("Password length must be equal or greater than 6!");
+      return;
+    }
+
     try {
       await signup(fields);
-      navigate('/');
+      navigate("/");
     } catch (error) {
       alert("Sign up failed!");
       console.log(error);
@@ -54,7 +72,7 @@ export default function SignupPage() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6"  onSubmit={handleSignup}>
+          <form className="space-y-6" onSubmit={handleSignup}>
             <div>
               <label
                 htmlFor="name"
@@ -67,8 +85,7 @@ export default function SignupPage() {
                   id="name"
                   name="name"
                   type="text"
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-jungle-green sm:text-sm/6"
                   value={fields.name}
                   onChange={changeFieldsValue}
                 />
@@ -88,7 +105,7 @@ export default function SignupPage() {
                   name="username"
                   type="text"
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-jungle-green sm:text-sm/6"
                   value={fields.username}
                   onChange={changeFieldsValue}
                 />
@@ -110,25 +127,54 @@ export default function SignupPage() {
                   name="password"
                   type="password"
                   required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  autoComplete="new-password"
+                  className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-jungle-green sm:text-sm/6 ${error === "Password length must be equal or greater than 6!" ? "outline-red-500" : ""}`}
                   value={fields.password}
                   onChange={changeFieldsValue}
                 />
               </div>
-              
+
               <p className="mt-1 text-sm/6 text-gray-500">
-              Must be at least 6 characters long.
+                Must be at least 6 characters long.
               </p>
             </div>
 
             <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  autoComplete="new-password"
+                  className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-jungle-green sm:text-sm/6 ${error === "Password does not match!" ? "outline-red-500" : ""}`}
+                  value={confirmPassword}
+                  onChange={changeConfirmPassword}
+                />
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-sm text-center font-medium text-red-500 bg-red-50 p-2 rounded-md">
+                {error}
+              </p>
+            )}
+
+            <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-jungle-green px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-jungle-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-jungle-green px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-jungle-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-jungle-green"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing up...' : 'Sign up'}
+                {isLoading ? "Signing up..." : "Sign up"}
               </button>
             </div>
           </form>
@@ -136,7 +182,9 @@ export default function SignupPage() {
           <p className="mt-10 text-center text-sm/6 text-gray-700">
             Already have an account?{" "}
             <Link to="/auth/login">
-              <span className="font-semibold text-jungle-green hover:text-jungle-light">Sign in</span>
+              <span className="font-semibold text-jungle-green hover:text-jungle-light">
+                Sign in
+              </span>
             </Link>
           </p>
         </div>

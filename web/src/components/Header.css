@@ -54,7 +54,7 @@
   }
 
   .right-section {
-    @apply w-45 shrink-0 flex justify-end;
+    @apply shrink-0 flex justify-end gap-2 mr-4;
   }
 
   .orders-link {
@@ -70,7 +70,7 @@
   }
 
   .cart-link {
-    @apply text-white flex items-center relative mr-3;
+    @apply text-white flex items-center relative;
   }
 
   .cart-icon {
