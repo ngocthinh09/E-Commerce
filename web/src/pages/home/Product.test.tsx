@@ -1,13 +1,13 @@
 import { it, expect, describe, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import axios from 'axios';
+import axiosClient from '../../api/axiosClient';
 import Product from './Product';
 import type { Product as ProductType } from '../../types';
 import { useCartStore } from '../../store/useCartStore';
 import type { CartStore } from '../../store/useCartStore';
 
-vi.mock('axios');
+vi.mock('../../api/axiosClient');
 vi.mock('../../store/useCartStore');
 
 describe('Product component', () => {
@@ -33,7 +33,7 @@ describe('Product component', () => {
 
         mockLoadCart = vi.fn();
         mockAddToCart = vi.fn(async (itemId: string, quantity: number = 1) => {
-            await axios.post('/api/cart-items', {
+            await axiosClient.post('/api/cart-items', {
                 productId: itemId,
                 quantity: quantity
             });
@@ -76,7 +76,7 @@ describe('Product component', () => {
         await user.click(addToCartButton);
 
         expect(mockAddToCart).toHaveBeenCalledWith('e43638ce-6aa0-4b85-b27f-e1d07eb678c6', 1);
-        expect(axios.post).toHaveBeenCalledWith('/api/cart-items', {
+        expect(axiosClient.post).toHaveBeenCalledWith('/api/cart-items', {
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
             quantity: 1
         });
@@ -95,7 +95,7 @@ describe('Product component', () => {
         expect(quantitySelector).toHaveValue('3');
         expect(mockAddToCart).toHaveBeenCalledWith('e43638ce-6aa0-4b85-b27f-e1d07eb678c6', 3);
 
-        expect(axios.post).toHaveBeenCalledWith('/api/cart-items', {
+        expect(axiosClient.post).toHaveBeenCalledWith('/api/cart-items', {
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
             quantity: 3
         })

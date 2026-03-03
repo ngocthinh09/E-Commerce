@@ -14,11 +14,11 @@ function Header() {
   const searchText = searchParams.get("search");
   const [search, setSearch] = useState<string>(searchText || "");
 
+  const cart = useCartStore((state) => state.cart);
   const loadCart = useCartStore((state) => (state.loadCart));
   useEffect(() => {
     loadCart();
   }, [loadCart])
-  const cart = useCartStore((state) => state.cart);
   
   let totalQuantity: number = 0;
   cart.forEach((cartItem) => {
