@@ -87,9 +87,9 @@
 
 ### 4.3 Testing Frontend
 - [ ] Write tests for `LoginPage` and `SignUpPage`
-- [ ] Update tests for `HomePage` (mock auth state)
-- [ ] Update tests for `PaymentSummary` (mock auth state)
-- [ ] Update tests for `Product`
+- [x] Update tests for `HomePage`
+- [x] Update tests for `PaymentSummary`
+- [x] Update tests for `Product`
 - [ ] Test complete flow: Sign Up → Login → Add to Cart → Checkout → View Orders
 
 ## Phase 5: Polish & Finalize

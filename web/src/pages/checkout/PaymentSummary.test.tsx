@@ -4,11 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import PaymentSummary from "./PaymentSummary";
 import { useLocation } from "react-router";
-import axios from "axios";
+import axiosClient from '../../api/axiosClient';
 import type { PaymentSummary as PaymentSummaryType } from "../../types";
 import { useCartStore, type CartStore } from "../../store/useCartStore";
 
-vi.mock('axios');
+vi.mock('../../api/axiosClient');
 vi.mock('../../store/useCartStore');
 
 describe("PaymentSummary component", () => {
@@ -28,7 +28,7 @@ describe("PaymentSummary component", () => {
 
     mockLoadCart = vi.fn();
     mockAddToCart = vi.fn(async (itemId: string, quantity: number): Promise<void> => {
-      await axios.post('/api/cart-items', {
+      await axiosClient.post('/api/cart-items', {
         productId: itemId,
         quantity: quantity,
       });
@@ -90,7 +90,7 @@ describe("PaymentSummary component", () => {
     const placeOrderButton = screen.getByTestId('place-order-button');
     await user.click(placeOrderButton);
 
-    expect(axios.post).toHaveBeenCalledWith('/api/orders');
+    expect(axiosClient.post).toHaveBeenCalledWith('/api/orders');
     expect(mockLoadCart).toHaveBeenCalled();
     
     expect(
