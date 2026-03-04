@@ -4,7 +4,6 @@ import type { Order } from "../../types";
 
 
 function OrderHeader({ order }: { order: Order }) {
-  console.log(order);
   return (
     <div className="order-header">
       <div className="order-header-left-section">

@@ -45,7 +45,8 @@
 - [x] Update `create-item.dto.ts` (remove userId from body, extract from token)
 
 ### 2.3 Testing Backend
-- [ ] Write unit tests for `AuthService` (signup, login, validate)
+- [x] Write unit tests for `PaymentSummaryService`, `PaymentSummaryController`, `UserService`
+- [ ] Write unit tests for `AuthService`
 - [ ] Write unit tests for `JwtStrategy`
 - [ ] Manually test endpoints using Postman/Thunder Client
 - [ ] Update e2e tests (`app.e2e-spec.ts`)

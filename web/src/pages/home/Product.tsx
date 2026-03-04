@@ -22,7 +22,6 @@ function Product({ product } : { product: ProductType }) {
   const selectQuantity = (event: ChangeEvent<HTMLSelectElement>): void => {
     const quantitySelected = Number(event.target.value);
     setQuantity(quantitySelected);
-    console.log(quantitySelected);
   };
 
   return (
