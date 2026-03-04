@@ -1,0 +1,53 @@
+name: API Unit Testing
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: 
+      - 'api/**'
+
+  pull_request: 
+    branches: [ "main" ]
+    paths:
+      - 'api/**'
+
+jobs:
+  test:
+    name: Run API Unit Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache-dependency-path: api/pnpm-lock.yml
+
+      - name: Install dependencies
+        working-directory: ./api
+        run: pnpm install
+
+      - name: Run linter
+        working-directory: ./api
+        run: pnpm lint
+
+      - name: Run unit tests
+        working-directory: ./api
+        run: pnpm test:cov
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
