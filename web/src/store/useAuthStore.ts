@@ -2,10 +2,11 @@ import { create } from "zustand";
 import axiosClient from "../api/axiosClient";
 import { type LoginData } from "../pages/auth/LoginPage";
 import type { SignupData } from "../pages/auth/SignupPage";
+import { toast } from "sonner";
 
 interface User {
   id: string;
-  username: string;
+  email: string;
   name?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -13,37 +14,34 @@ interface User {
 
 export interface AuthStore {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 
   login: (loginData: LoginData) => Promise<void>;
-  signup: (signupData: SignupData) => Promise<void>;
-  logout: () => void;
+  signup: (signupData: SignupData) => Promise<string>;
+  logout: () => Promise<void>;
+  fetchProfile: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
-  token: localStorage.getItem("access_token"),
-  isAuthenticated: !!localStorage.getItem("access_token"),
+  isAuthenticated: false,
   isLoading: false,
 
   login: async (loginData) => {
+    console.log("Attempting login with:", loginData);
     set({ isLoading: true });
     try {
+      console.log("Sending login request to backend...");
       const response = await axiosClient.post("/api/auth/login", loginData);
-      const { access_token, user } = response.data;
-      localStorage.setItem("access_token", access_token);
-
-      set({
-        token: access_token,
-        user: user,
-        isAuthenticated: true,
-        isLoading: false,
-      });
+      console.log("Login response:", response.data);
+      const { user } = response.data;
+      set({ user, isAuthenticated: true });
     } catch (error) {
-      set({ isLoading: false });
+      console.error("Login error:", error);
       throw error;
+    } finally {
+      set({ isLoading: false });
     }
   },
 
@@ -51,24 +49,34 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const response = await axiosClient.post("/api/auth/signup", signupData);
-      const { access_token, user } = response.data;
-      localStorage.setItem("access_token", access_token);
-
-      set({
-        token: access_token,
-        user: user,
-        isAuthenticated: true,
-        isLoading: false,
-      });
+      set({ isLoading: false });
+      return response.data.message;
     } catch (error) {
       set({ isLoading: false });
       throw error;
     }
   },
 
-  logout: () => {
-    localStorage.removeItem("access_token");
-    set({ user: null, token: null, isAuthenticated: false });
-    window.location.href = "/auth/login";
+  logout: async () => {
+    try {
+      await axiosClient.post("/api/auth/signout");
+      set({ user: null, isAuthenticated: false });
+      toast.success("Logged out successfully");
+      setTimeout(() => {
+        window.location.href = "/auth/login";
+      }, 500);
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to log out");
+    }
+  },
+
+  fetchProfile: async () => {
+    try {
+      const response = await axiosClient.get("/api/auth/profile");
+      set({ user: response.data, isAuthenticated: true });
+    } catch {
+      set({ user: null, isAuthenticated: false });
+    }
   },
 }));

@@ -49,22 +49,22 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findByUsername', () => {
-    it('should return user when username exist', async () => {
+  describe('findByEmail', () => {
+    it('should return user when email exist', async () => {
       const mockUser = mockUsers[0];
       mockRepository.findOne.mockResolvedValue(mockUser);
 
-      const result = await service.findByUsername('admin');
+      const result = await service.findByEmail('admin@gmail.com');
       expect(result).toEqual(mockUser);
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { username: 'admin' },
+        where: { email: 'admin@gmail.com' },
       });
     });
 
-    it('should return null when username does not exist', async () => {
+    it('should return null when email does not exist', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
-      const result = await service.findByUsername('anonymous');
+      const result = await service.findByEmail('anonymous@gmail.com');
       expect(result).toBeNull();
     });
   });
@@ -84,7 +84,7 @@ describe('UserService', () => {
     it('should return null when id does not exist', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
-      const result = await service.findByUsername('anonymous-id');
+      const result = await service.findById('anonymous-id');
       expect(result).toBeNull();
     });
   });
@@ -94,7 +94,7 @@ describe('UserService', () => {
       mockRepository.find.mockResolvedValue(mockUsers);
       const result = await service.findAll();
       expect(result).toEqual(mockUsers);
-      expect(result).toHaveLength(3);
+      expect(result).toHaveLength(2);
       expect(repository.find).toHaveBeenCalled();
     });
 
@@ -110,7 +110,7 @@ describe('UserService', () => {
   describe('createUser', () => {
     it('should create user with hashed password', async () => {
       const createUserDto: CreateUserDto = {
-        username: 'new-user',
+        email: 'new-user@gmail.com',
         password: 'new-password',
         name: 'New User',
       };
@@ -140,9 +140,9 @@ describe('UserService', () => {
       expect(repository.save).toHaveBeenCalledWith(createdUser);
     });
 
-    it('should throw ConflictException when username already exists', async () => {
+    it('should throw ConflictException when email already exists', async () => {
       const createUserDto: CreateUserDto = {
-        username: 'admin',
+        email: 'admin@gmail.com',
         password: 'password123',
         name: 'Admin User',
       };
@@ -153,7 +153,7 @@ describe('UserService', () => {
         ConflictException,
       );
       await expect(service.createUser(createUserDto)).rejects.toThrow(
-        'Username already exists!',
+        'Email already exists!',
       );
       expect(repository.create).not.toHaveBeenCalled();
       expect(repository.save).not.toHaveBeenCalled();
@@ -163,7 +163,7 @@ describe('UserService', () => {
   describe('validateUser', () => {
     it('should return user when credentials are valid', async () => {
       const loginUserDto: LoginUserDto = {
-        username: 'admin',
+        email: 'admin@gmail.com',
         password: 'admin123',
       };
 
@@ -182,7 +182,7 @@ describe('UserService', () => {
 
     it('should throw UnauthorizedException when password is incorrect', async () => {
       const loginUserDto: LoginUserDto = {
-        username: 'admin',
+        email: 'admin@gmail.com',
         password: 'wrongpassword',
       };
 
@@ -194,13 +194,13 @@ describe('UserService', () => {
         UnauthorizedException,
       );
       await expect(service.validateUser(loginUserDto)).rejects.toThrow(
-        'Username or password is unvalid.',
+        'Invalid credentials!',
       );
     });
 
     it('should throw UnauthorizedException when user does not exist', async () => {
       const loginUserDto: LoginUserDto = {
-        username: 'nonexistent',
+        email: 'nonexistent@gmail.com',
         password: 'password123',
       };
 
@@ -210,7 +210,7 @@ describe('UserService', () => {
         UnauthorizedException,
       );
       await expect(service.validateUser(loginUserDto)).rejects.toThrow(
-        'Username or password is unvalid.',
+        'Invalid credentials!',
       );
       expect(bcrypt.compare).not.toHaveBeenCalled();
     });

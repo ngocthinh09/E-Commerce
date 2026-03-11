@@ -12,6 +12,8 @@ import { OrderModule } from './modules/order/order.module';
 import { ResetModule } from './modules/reset/reset.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailService } from './modules/mail/mail.service';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -28,9 +30,10 @@ import { AuthModule } from './modules/auth/auth.module';
     ResetModule,
     UserModule,
     AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MailService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

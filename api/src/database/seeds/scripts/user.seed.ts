@@ -8,14 +8,15 @@ export async function seedUsers(dataSource: DataSource) {
 
   for (const userData of defaultUsers) {
     const existingUser = await userRepository.findOne({
-      where: { username: userData.username },
+      where: { email: userData.email },
     });
 
     if (!existingUser) {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
       const user = userRepository.create({
-        username: userData.username,
+        id: userData.id,
+        email: userData.email,
         password: hashedPassword,
         name: userData.name,
       });

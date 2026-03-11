@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../../user/user.service';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -11,18 +12,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => req?.cookies?.access_token ?? null,
+      ]),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_ACCESS_SECRET') as any,
+      secretOrKey: configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
     });
   }
 
-  async validate(payload: { sub: string; username: string }) {
-    const username = payload.username;
-    const user = await this.userService.findByUsername(username);
+  async validate(payload: { sub: string; email: string }) {
+    const email = payload.email;
+    const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Token is unvalid or user is not exist!');
     }
-    return { id: payload.sub, username: payload.username };
+    return { id: payload.sub, email: payload.email };
   }
 }
