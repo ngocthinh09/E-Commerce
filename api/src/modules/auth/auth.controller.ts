@@ -52,10 +52,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  signUp(
-    @Body() createUserDto: CreateUserDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signup(createUserDto);
   }
 
@@ -106,47 +103,36 @@ export class AuthController {
   @Get('verify-email')
   async verifyEmail(@Request() request, @Res() res) {
     const { userId, token } = request.query;
-    try {
-      const verifiedUser = await this.userService.updateVerificationStatus(
-        userId,
-        token,
-      );
-      const payload = {
-        id: verifiedUser.id,
-        email: verifiedUser.email,
-      };
-      const { access_token, refresh_token, user } =
-        this.authService.generateTokens(payload);
-      res.cookie('access_token', access_token, {
-        ...this.cookieOptions,
-        maxAge: +this.configService.getOrThrow(
-          'JWT_ACCESS_TOKEN_EXPIRATION_MS',
-        ),
-      });
-      res.cookie('refresh_token', refresh_token, {
-        ...this.cookieOptions,
-        maxAge: +this.configService.getOrThrow(
-          'JWT_REFRESH_TOKEN_EXPIRATION_MS',
-        ),
-      });
-      return res.redirect(
-        `${this.configService.getOrThrow('FRONTEND_URL')}/?verified=true`,
-      );
-    } catch (error) {
-      throw error;
-    }
+    const verifiedUser = await this.userService.updateVerificationStatus(
+      userId,
+      token,
+    );
+    const payload = {
+      id: verifiedUser.id,
+      email: verifiedUser.email,
+    };
+    const { access_token, refresh_token } =
+      this.authService.generateTokens(payload);
+    res.cookie('access_token', access_token, {
+      ...this.cookieOptions,
+      maxAge: +this.configService.getOrThrow('JWT_ACCESS_TOKEN_EXPIRATION_MS'),
+    });
+    res.cookie('refresh_token', refresh_token, {
+      ...this.cookieOptions,
+      maxAge: +this.configService.getOrThrow('JWT_REFRESH_TOKEN_EXPIRATION_MS'),
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return res.redirect(
+      `${this.configService.getOrThrow('FRONTEND_URL')}/?verified=true`,
+    );
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('forgot-password')
   async forgotPassword(@Request() request) {
     const { email } = request.body;
-    try {
-      await this.authService.sendResetPasswordEmail(email);
-      return { message: 'Password reset email sent.' };
-    } catch (error) {
-      throw error;
-    }
+    await this.authService.sendResetPasswordEmail(email);
+    return { message: 'Password reset email sent.' };
   }
 
   @HttpCode(HttpStatus.OK)
