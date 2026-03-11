@@ -115,14 +115,19 @@ export class AuthController {
         id: verifiedUser.id,
         email: verifiedUser.email,
       };
-      const { access_token, refresh_token, user } = this.authService.generateTokens(payload);
+      const { access_token, refresh_token, user } =
+        this.authService.generateTokens(payload);
       res.cookie('access_token', access_token, {
         ...this.cookieOptions,
-        maxAge: +this.configService.getOrThrow('JWT_ACCESS_TOKEN_EXPIRATION_MS'),
+        maxAge: +this.configService.getOrThrow(
+          'JWT_ACCESS_TOKEN_EXPIRATION_MS',
+        ),
       });
       res.cookie('refresh_token', refresh_token, {
         ...this.cookieOptions,
-        maxAge: +this.configService.getOrThrow('JWT_REFRESH_TOKEN_EXPIRATION_MS'),
+        maxAge: +this.configService.getOrThrow(
+          'JWT_REFRESH_TOKEN_EXPIRATION_MS',
+        ),
       });
       return res.redirect(
         `${this.configService.getOrThrow('FRONTEND_URL')}/?verified=true`,

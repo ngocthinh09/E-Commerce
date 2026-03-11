@@ -20,7 +20,9 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
       useFactory: (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
-          expiresIn: configService.getOrThrow<number>('JWT_ACCESS_TOKEN_EXPIRATION_MS'),
+          expiresIn: configService.getOrThrow<number>(
+            'JWT_ACCESS_TOKEN_EXPIRATION_MS',
+          ),
         },
       }),
     }),

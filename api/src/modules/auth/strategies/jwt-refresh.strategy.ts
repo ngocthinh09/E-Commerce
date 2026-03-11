@@ -32,7 +32,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   async validate(payload: RefreshTokenPayload) {
     const user = await this.usersService.findByEmail(payload.email);
     if (!user) {
-      throw new UnauthorizedException("User not found!");
+      throw new UnauthorizedException('User not found!');
     }
     return { id: payload.sub, email: payload.email };
   }
