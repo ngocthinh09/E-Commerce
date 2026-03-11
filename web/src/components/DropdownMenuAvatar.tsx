@@ -15,10 +15,16 @@ import {
   BellIcon,
   LogOutIcon,
 } from "lucide-react";
+import { useEffect } from "react";
 
 export function DropdownMenuAvatar() {
-  const user = useAuthStore((state) => (state.user));
+  const getProfile = useAuthStore((state) => (state.fetchProfile));
   const logout = useAuthStore((state) => (state.logout));
+  const user = useAuthStore((state) => (state.user));
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   return (
     <DropdownMenu>
@@ -38,7 +44,7 @@ export function DropdownMenuAvatar() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-               {user?.username || "Guest"}
+               {user?.email || "Guest"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
                {user?.name || "No fullname provided"}

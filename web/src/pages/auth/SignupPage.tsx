@@ -2,16 +2,17 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import SmallLogo from "../../assets/images/mobile-logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export interface SignupData {
-  username: string;
+  email: string;
   name?: string;
   password: string;
 }
 
 export default function SignupPage() {
   const [fields, setFields] = useState<SignupData>({
-    username: "",
+    email: "",
     name: "",
     password: "",
   });
@@ -50,10 +51,11 @@ export default function SignupPage() {
 
     try {
       await signup(fields);
-      navigate("/");
-    } catch (error) {
-      alert("Sign up failed!");
-      console.log(error);
+      toast.success("Sign up successful! Please check your email to verify your account.");
+      navigate("/auth/login");
+    } catch (error: any) {
+      const message = error?.response?.data?.message ?? "Sign up failed!";
+      toast.error(message);
     }
   };
 
@@ -94,19 +96,19 @@ export default function SignupPage() {
 
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-sm/6 font-medium text-gray-900"
               >
-                Username
+                Email
               </label>
               <div className="mt-2">
                 <input
-                  id="username"
-                  name="username"
-                  type="text"
+                  id="email"
+                  name="email"
+                  type="email"
                   required
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-jungle-green sm:text-sm/6"
-                  value={fields.username}
+                  value={fields.email}
                   onChange={changeFieldsValue}
                 />
               </div>
