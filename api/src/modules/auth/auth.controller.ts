@@ -29,8 +29,8 @@ export class AuthController {
   ) {
     this.cookieOptions = {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
     };
   }
 
