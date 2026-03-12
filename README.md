@@ -161,6 +161,35 @@ Make sure you have the following installed on your machine:
    ```bash
    npm run dev
    ```
+## Run project with Docker
+>  **Requirement:** Make sure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is installed before proceeding.
+
+Running the project with Docker will spin up 3 containers:
+- **ecommerce-db** — PostgreSQL database (port `5432`)
+- **ecommerce-api** — NestJS backend API (port `3000`)
+- **ecommerce-web** — React frontend served via Nginx (port `8080`)
+
+### Steps
+
+1. **Build the images** (required on first run or after code changes):
+```bash
+docker compose build --no-cache
+```
+2. **Start all containers**
+```bash
+docker compose up -d
+```
+
+3. **Access the application**
+- Frontend: [http://localhost:8080](http://localhost:8080)
+- Backend API: [http://localhost:3000](http://localhost:3000)
+
+4. **Stop the application**
+```bash
+docker compose down
+```
+
+Note: On the first startup, the API container will automatically seed the database. This may take a few seconds.
 
 ## Available Scripts
 
