@@ -203,3 +203,7 @@ Note: On the first startup, the API container will automatically seed the databa
 - `npm run dev`: Start the frontend development server
 - `npm run build`: Build the frontend for production
 - `npx vitest`: Run frontend unit tests
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
